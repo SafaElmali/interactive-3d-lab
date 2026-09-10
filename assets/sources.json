@@ -1,0 +1,478 @@
+{
+  "assets": [
+    {
+      "id": "MaterialsVariantsShoe",
+      "sourceUrl": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/MaterialsVariantsShoe",
+      "downloadUrl": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/MaterialsVariantsShoe/glTF-Binary/MaterialsVariantsShoe.glb",
+      "licenseSourceUrl": "https://github.com/KhronosGroup/glTF-Sample-Assets/blob/main/Models/MaterialsVariantsShoe/README.md",
+      "bytes": 7833592,
+      "megabytes": 7.834,
+      "sha256": "e1d7cb190382111e5a5b37b51e9a7f007f7eb2ab1b6185e0188e8d0a0d1265a7",
+      "fullyEmbedded": true,
+      "externalDependencies": [],
+      "extensionsUsed": [
+        "KHR_materials_variants"
+      ],
+      "extensionsRequired": [],
+      "imageCount": 5,
+      "materials": [
+        {
+          "index": 0,
+          "alphaMode": "OPAQUE",
+          "doubleSided": false,
+          "name": "phong1SG",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              1,
+              1,
+              1,
+              1
+            ],
+            "baseColorTexture": {
+              "index": 1,
+              "texCoord": 0
+            },
+            "metallicFactor": 1,
+            "roughnessFactor": 1,
+            "metallicRoughnessTexture": {
+              "index": 0,
+              "texCoord": 0
+            }
+          },
+          "normalTexture": {
+            "index": 2,
+            "scale": 1,
+            "texCoord": 0
+          },
+          "occlusionTexture": {
+            "index": 0,
+            "strength": 1,
+            "texCoord": 0
+          },
+          "emissiveFactor": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 1,
+          "alphaMode": "OPAQUE",
+          "doubleSided": false,
+          "name": "phong1SG",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              1,
+              1,
+              1,
+              1
+            ],
+            "baseColorTexture": {
+              "index": 3,
+              "texCoord": 0
+            },
+            "metallicFactor": 1,
+            "roughnessFactor": 1,
+            "metallicRoughnessTexture": {
+              "index": 0,
+              "texCoord": 0
+            }
+          },
+          "normalTexture": {
+            "index": 2,
+            "scale": 1,
+            "texCoord": 0
+          },
+          "occlusionTexture": {
+            "index": 0,
+            "strength": 1,
+            "texCoord": 0
+          },
+          "emissiveFactor": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "index": 2,
+          "alphaMode": "OPAQUE",
+          "doubleSided": false,
+          "name": "phong1SG",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              1,
+              1,
+              1,
+              1
+            ],
+            "baseColorTexture": {
+              "index": 4,
+              "texCoord": 0
+            },
+            "metallicFactor": 1,
+            "roughnessFactor": 1,
+            "metallicRoughnessTexture": {
+              "index": 0,
+              "texCoord": 0
+            }
+          },
+          "normalTexture": {
+            "index": 2,
+            "scale": 1,
+            "texCoord": 0
+          },
+          "occlusionTexture": {
+            "index": 0,
+            "strength": 1,
+            "texCoord": 0
+          },
+          "emissiveFactor": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "parts": [
+        {
+          "node": "Shoe",
+          "mesh": "shoe",
+          "materialIndices": [
+            0
+          ],
+          "vertices": 13540,
+          "triangles": 22700,
+          "boundsWorld": {
+            "min": [
+              -0.1473290023,
+              -0.0006479932916700765,
+              -0.053048001191468776
+            ],
+            "max": [
+              0.1505499954549708,
+              0.1524530132916701,
+              0.06274999819146877
+            ]
+          }
+        }
+      ],
+      "boundsWorld": {
+        "min": [
+          -0.1473290023,
+          -0.0006479932916700765,
+          -0.053048001191468776
+        ],
+        "max": [
+          0.1505499954549708,
+          0.1524530132916701,
+          0.06274999819146877
+        ],
+        "dimensionsXYZ": [
+          0.29787899775497084,
+          0.1531010065833402,
+          0.11579799938293756
+        ],
+        "units": "glTF meters",
+        "method": "All decoded POSITION vertices transformed by scene node matrices; cameras excluded."
+      },
+      "license": "CC-BY-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "creator": "Shopify",
+      "copyright": "\u00a9 2021 Shopify",
+      "attribution": "Materials Variants Shoe by Shopify, \u00a9 2021, licensed under CC BY 4.0. Source: Khronos glTF Sample Assets.",
+      "variants": [
+        {
+          "index": 0,
+          "name": "midnight",
+          "materialIndex": 0
+        },
+        {
+          "index": 1,
+          "name": "beach",
+          "materialIndex": 1
+        },
+        {
+          "index": 2,
+          "name": "street",
+          "materialIndex": 2
+        }
+      ],
+      "customizationNotes": [
+        "Three color variants: midnight (0), beach (1), street (2), using the same shoe geometry and normal/ORM maps.",
+        "All three materials share the name phong1SG; select by material index or KHR_materials_variants mapping instead of name.",
+        "One textured mesh/primitive; upper, laces, and sole are not separate materials. Use built-in variants for crisp color customization.",
+        "Longest axis is X."
+      ]
+    },
+    {
+      "id": "ToyCar",
+      "sourceUrl": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/ToyCar",
+      "downloadUrl": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/ToyCar/glTF-Binary/ToyCar.glb",
+      "licenseSourceUrl": "https://github.com/KhronosGroup/glTF-Sample-Assets/blob/main/Models/ToyCar/README.md",
+      "bytes": 5422412,
+      "megabytes": 5.422,
+      "sha256": "01a60862de55cd4b9f3acfab0b0def86451800f9c42467fcd61052c16cb9838c",
+      "fullyEmbedded": true,
+      "externalDependencies": [],
+      "extensionsUsed": [
+        "KHR_texture_transform",
+        "KHR_materials_clearcoat",
+        "KHR_materials_transmission",
+        "KHR_materials_sheen"
+      ],
+      "extensionsRequired": [],
+      "imageCount": 8,
+      "materials": [
+        {
+          "index": 0,
+          "name": "ToyCar",
+          "doubleSided": true,
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 2
+            },
+            "metallicRoughnessTexture": {
+              "index": 3
+            }
+          },
+          "normalTexture": {
+            "index": 0
+          },
+          "occlusionTexture": {
+            "index": 3
+          },
+          "emissiveTexture": {
+            "index": 1
+          },
+          "emissiveFactor": [
+            1,
+            1,
+            1
+          ],
+          "extensions": {
+            "KHR_materials_clearcoat": {
+              "clearcoatFactor": 1,
+              "clearcoatTexture": {
+                "index": 7,
+                "texCoord": 0
+              }
+            }
+          }
+        },
+        {
+          "index": 1,
+          "name": "Fabric",
+          "doubleSided": true,
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              0.15,
+              0.15,
+              0.15,
+              1
+            ],
+            "baseColorTexture": {
+              "index": 6,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "scale": [
+                    3,
+                    3
+                  ],
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0,
+            "roughnessFactor": 1
+          },
+          "normalTexture": {
+            "index": 4,
+            "extensions": {
+              "KHR_texture_transform": {
+                "offset": [
+                  0,
+                  0
+                ],
+                "scale": [
+                  3,
+                  3
+                ],
+                "texCoord": 0
+              }
+            }
+          },
+          "occlusionTexture": {
+            "index": 5,
+            "extensions": {
+              "KHR_texture_transform": {
+                "offset": [
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1
+                ],
+                "texCoord": 0
+              }
+            }
+          },
+          "extensions": {
+            "KHR_materials_sheen": {
+              "sheenRoughnessFactor": 0.5,
+              "sheenColorFactor": [
+                1,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "index": 2,
+          "name": "Glass",
+          "alphaMode": "OPAQUE",
+          "pbrMetallicRoughness": {
+            "baseColorFactor": [
+              0.3,
+              0.8,
+              0.3,
+              1
+            ],
+            "metallicFactor": 0,
+            "roughnessFactor": 0
+          },
+          "extensions": {
+            "KHR_materials_transmission": {
+              "transmissionFactor": 1
+            }
+          }
+        }
+      ],
+      "parts": [
+        {
+          "node": "ToyCar",
+          "mesh": "ToyCar",
+          "materialIndices": [
+            0
+          ],
+          "vertices": 66951,
+          "triangles": 88837,
+          "boundsWorld": {
+            "min": [
+              -0.00935376434326172,
+              0.0009924232129170803,
+              -0.01940494961373507
+            ],
+            "max": [
+              0.009353763580322265,
+              0.012616623116645066,
+              0.018974473674275533
+            ]
+          }
+        },
+        {
+          "node": "Fabric",
+          "mesh": "Fabric",
+          "materialIndices": [
+            1
+          ],
+          "vertices": 8959,
+          "triangles": 17605,
+          "boundsWorld": {
+            "min": [
+              -0.03499508972167969,
+              -0.016206272696660924,
+              -0.036981149943531196
+            ],
+            "max": [
+              0.0384478271484375,
+              0.0010126104740558275,
+              0.03698114211912706
+            ]
+          }
+        },
+        {
+          "node": "Glass",
+          "mesh": "Glass",
+          "materialIndices": [
+            2
+          ],
+          "vertices": 1519,
+          "triangles": 2494,
+          "boundsWorld": {
+            "min": [
+              -0.005741104888916016,
+              0.008959808007215223,
+              -0.009318026931707968
+            ],
+            "max": [
+              0.005741104125976563,
+              0.012069183493678979,
+              0.009112582114884584
+            ]
+          }
+        }
+      ],
+      "boundsWorld": {
+        "min": [
+          -0.03499508972167969,
+          -0.016206272696660924,
+          -0.036981149943531196
+        ],
+        "max": [
+          0.0384478271484375,
+          0.012616623116645066,
+          0.03698114211912706
+        ],
+        "dimensionsXYZ": [
+          0.0734429168701172,
+          0.02882289581330599,
+          0.07396229206265825
+        ],
+        "units": "glTF meters",
+        "method": "All decoded POSITION vertices transformed by scene node matrices; cameras excluded."
+      },
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "creator": "Guido Odendahl (initial model); Eric Chadwick (extensions and scene composition)",
+      "attribution": "Toy Car by Guido Odendahl, materials and scene by Eric Chadwick. CC0 1.0. Source: Khronos glTF Sample Assets.",
+      "customizationNotes": [
+        "Three independent nodes/meshes/materials: ToyCar (car body/chassis/wheels/interior; index 0), Fabric (red display cloth beneath car; index 1), Glass (windows; index 2). Remove or hide Fabric for an isolated car; do so before computing its display bounds.",
+        "Main ToyCar material uses a baked base-color map across body, wheels, trim, and lights; whole-material tint affects all these surfaces. For paint-only changes, use a masked texture/material shader.",
+        "Glass transmission factor 1 and clearcoat/sheen extensions are used; retain physical materials and environment lighting for realistic finish.",
+        "Eight embedded cameras can be ignored. Remove Fabric and cameras before display normalization.",
+        "Node source scale is 0.0001. Longest axis is Z."
+      ],
+      "visualDescription": "Realistically shaded green miniature classic coupe with chrome trim, racing/flame decals, and transparent windows. Fabric is an unrelated red cloth display surface.",
+      "carOnlyBoundsWorld": {
+        "min": [
+          -0.00935376434326172,
+          0.0009924232129170803,
+          -0.01940494961373507
+        ],
+        "max": [
+          0.009353763580322265,
+          0.012616623116645066,
+          0.018974473674275533
+        ],
+        "dimensionsXYZ": [
+          0.018707527923583985,
+          0.011624199903727985,
+          0.038379423288010604
+        ],
+        "units": "glTF meters",
+        "excludes": [
+          "Fabric",
+          "cameras"
+        ]
+      },
+      "previewPath": "/tmp/object-lab-assets/ToyCar.preview.jpg"
+    }
+  ]
+}

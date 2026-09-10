@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Object Lab: a collection of nine interactive 3D experiments. Rotate, customize, and explore."
+    />
+    <meta name="theme-color" content="#f5f5f0" />
+    <title>Object Lab — Interactive 3D experiments</title>
+    <link rel="icon" href="./favicon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="importmap">
+      { "imports": { "three": "./vendor/three.module.js" } }
+    </script>
+    <script type="module" src="./home.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="wordmark" href="./"
+        >OBJECT<span>/</span>LAB<span class="edition">®</span></a
+      ><span class="header-note">A playground in three dimensions</span
+      ><a
+        class="source-link"
+        href="https://github.com/SafaElmali/interactive-3d-lab"
+        target="_blank"
+        rel="noreferrer"
+        >Source ↗</a
+      >
+    </header>
+    <main>
+      <section class="intro">
+        <div>
+          <span class="eyebrow">INDEPENDENT EXPERIMENTS · VOL. 01</span>
+          <h1>Objects in <em>motion.</em></h1>
+        </div>
+        <p>
+          Rotate. Recolor. Pull things apart.<br />Nine little worlds to get
+          your hands on.
+        </p>
+      </section>
+      <div class="gallery-label">
+        <span>THE COLLECTION</span><span>01 — 09</span>
+      </div>
+      <div id="gallery" class="gallery"></div>
+    </main>
+    <footer>
+      <span>OBJECT/LAB · 2026</span><span>Made to be played with.</span
+      ><a href="./credits.html">Credits & sources ↗</a>
+    </footer>
+    <noscript
+      >Please enable JavaScript to explore the interactive gallery.
+      <a href="./projects/can-do/">Open CAN/DO</a></noscript
+    >
+  </body>
+</html>
