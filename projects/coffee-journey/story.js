@@ -49,6 +49,7 @@ export async function createStory() {
     roast,
     coffeeSurface,
     milk,
+    foam,
   } = model.parts;
   // A loose cloud of real bean geometry, gathered by scrolling into the grinder.
   const originalBeans = beans.children.slice();
@@ -140,6 +141,8 @@ export async function createStory() {
       const fill = smooth(0.46, 0.76, p);
       coffeeSurface.position.y = mix(-0.35, 0.385, fill);
       coffeeSurface.scale.setScalar(mix(0.76, 1, fill));
+      foam.position.y = coffeeSurface.position.y + 0.013;
+      foam.scale.setScalar(mix(0.76, 1, fill));
       coffee.color
         .set('#482b1d')
         .lerp(new T.Color('#b88f64'), smooth(0.66, 0.95, p));
@@ -157,7 +160,7 @@ export async function createStory() {
           0.5 + a * 0.9,
           Math.cos(a * 6 + i) * 0.1,
         );
-        particle.scale.setScalar(0.5 + a * 1.5);
+        particle.scale.set(0.09 + a * 0.14, 0.16 + a * 0.25, 1);
       });
     },
   };

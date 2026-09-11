@@ -35,6 +35,12 @@ npm run build  # Copies the deployable site into dist/
 | `projects/car-garage/`         | After Hours   | Night portrait, paint and angle changes, moving light gates, final lap |
 | `projects/coffee-journey/`     | Daily Ritual  | Bean cloud, grinder, pouring coffee, steaming cup                      |
 
+## Surface quality
+
+The shared renderer uses a local HDR studio environment, directed lighting, shadows between parts, and antialiased rendering up to 2× device resolution. Custom objects use beveled edges and smooth profiles. The turntable, watch, and buildings use photographic normal and roughness maps; glass and metal use physical materials. The car is the detailed Khronos CarConcept asset, with separate paint, glass, tire, and interior materials. Geometry and textures are reused across repeated parts.
+
+All models, maps, and HDR files are served locally. Asset provenance is in `CREDITS.md`, `assets/sources.json`, and `assets/materials/sources.json`. CAN/DO retains its standalone rendering and motion.
+
 ## Structure
 
 ```text

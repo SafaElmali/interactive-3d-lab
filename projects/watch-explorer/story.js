@@ -1,7 +1,5 @@
 import { create } from './scene.js';
-import { box, metal } from '../../shared/geometry.js';
 import {
-  T,
   rig,
   pose,
   sample,
@@ -41,34 +39,7 @@ export async function createStory() {
     root = rig(model, 5.3);
   const { face, crystal, movement, hours, minutes, seconds, strap, dial } =
     model.parts;
-  // Give the illustrative exposed movement small, visible cog teeth.
-  const gears = movement.children.slice().map((ring, i) => {
-    const gear = new T.Group();
-    gear.position.copy(ring.position);
-    ring.position.set(0, 0, 0);
-    movement.remove(ring);
-    gear.add(ring);
-    movement.add(gear);
-    const material = metal(i % 2 ? '#d4c59e' : '#b79a57');
-    for (let j = 0; j < 16; j++) {
-      const a = (j / 16) * Math.PI * 2;
-      const tooth = box(
-        0.045,
-        0.035,
-        0.06,
-        material,
-        [
-          Math.sin(a) * (0.165 + i * 0.008),
-          0,
-          Math.cos(a) * (0.165 + i * 0.008),
-        ],
-        0.004,
-      );
-      tooth.rotation.y = a;
-      gear.add(tooth);
-    }
-    return gear;
-  });
+  const gears = movement.children;
   return {
     root,
     update(p, t, ctx) {

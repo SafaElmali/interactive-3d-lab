@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { register } from 'node:module';
 import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 register('./three-loader.mjs', import.meta.url);
 // These checks validate geometry and state transitions. They do not render pixels.
 globalThis.self = globalThis;
@@ -26,8 +27,60 @@ GLTFLoader.prototype.loadAsync = async function (url) {
     '',
   );
 };
-T.TextureLoader.prototype.loadAsync = async () =>
-  new T.Texture({ width: 1, height: 1 });
+T.TextureLoader.prototype.loadAsync = async (url) => {
+  await readFile(new URL(url));
+  const texture = new T.Texture({ width: 1, height: 1 });
+  texture.name = new URL(url).pathname;
+  return texture;
+};
+const { box, cylinder, mat, keycap } = await import('../shared/geometry.js');
+for (const object of [
+  box(2, 0.25, 1, mat('#fff')),
+  keycap(2, 0.25, 1, mat('#fff')),
+]) {
+  const bounds = new T.Box3().setFromObject(object);
+  assert.ok(Math.abs(bounds.max.y - 0.125) < 0.001);
+  assert.ok(Math.abs(bounds.min.y + 0.125) < 0.001);
+  assert.ok(
+    bounds.max.x <= 1.001 && bounds.max.z <= 0.501,
+    'Bevels must preserve fit between parts',
+  );
+  assert.ok(object.geometry.attributes.normal.array.every(Number.isFinite));
+}
+const round = cylinder(1, 0.1, mat('#fff'));
+assert.ok(
+  round.geometry.attributes.position.count > 1000,
+  'Circular edges must be smooth',
+);
+const { RGBELoader } = await import('../vendor/RGBELoader.js');
+const hdr = await readFile(
+  new URL(
+    '../assets/materials/studio_small_08/studio_small_08_1k.hdr',
+    import.meta.url,
+  ),
+);
+const parsedHDR = new RGBELoader().parse(
+  hdr.buffer.slice(hdr.byteOffset, hdr.byteOffset + hdr.byteLength),
+);
+assert.equal(parsedHDR.width, 1024);
+assert.equal(parsedHDR.height, 512);
+const materialSources = JSON.parse(
+  await readFile(
+    new URL('../assets/materials/sources.json', import.meta.url),
+    'utf8',
+  ),
+);
+for (const asset of materialSources.assets) {
+  for (const file of Object.values(asset.files)) {
+    const bytes = await readFile(new URL('../' + file.path, import.meta.url));
+    assert.equal(bytes.length, file.bytes, file.path);
+    assert.equal(
+      createHash('md5').update(bytes).digest('hex'),
+      file.md5,
+      file.path,
+    );
+  }
+}
 const { projects } = await import('../shared/projects.js');
 for (const project of projects) {
   const { create } = await import(`../projects/${project.id}/scene.js`);
@@ -59,18 +112,55 @@ for (const project of projects) {
       n.matrixWorld.elements.every(Number.isFinite),
       `${project.id}: invalid transform`,
     );
+  const geometries = new Set(objects.map((n) => n.geometry));
+  for (const geometry of geometries) {
+    for (const attribute of Object.values(geometry.attributes))
+      assert.ok(
+        (attribute.array ?? attribute.data.array).every(Number.isFinite),
+        `${project.id}: invalid surface geometry`,
+      );
+  }
   if (project.id === 'car-garage') {
+    const materials = new Set(objects.map((n) => n.material));
+    const tire = objects.find((n) => n.material.name === 'Tireside').material;
+    const tireColor = tire.color.clone();
+    const glass = objects.find((n) => n.material.name === 'Glass').material;
+    model.controls[0].change(1, model.controls[0].options[1]);
     assert.ok(
-      !objects.some((n) => n.material.name === 'Fabric'),
-      'Display fabric must be removed from car',
+      tire.color.equals(tireColor),
+      'Paint changes must preserve tire shading',
     );
-    const material = objects.find((n) => n.material.name === 'ToyCar').material;
-    const shader = { uniforms: {}, fragmentShader: '#include <map_fragment>' };
-    material.onBeforeCompile(shader);
+    assert.equal(glass.transmission, 1, 'Preserve the imported window glass');
+    assert.ok(model.parts.bodyMaterials.size > 0);
+    for (const material of model.parts.bodyMaterials)
+      assert.ok(material.color.equals(new T.Color('#c84731')));
+    const triangles = objects.reduce(
+      (total, n) =>
+        total +
+        (n.geometry.index?.count ?? n.geometry.attributes.position.count) / 3,
+      0,
+    );
     assert.ok(
-      shader.fragmentShader.includes('greenMask') && shader.uniforms.labPaint,
-      'Car paint mask is not attached',
+      triangles > 200000 && materials.size > 20,
+      'The detailed car must preserve separate body, interior, wheels, and glass',
     );
+    const bytes = await readFile(
+      new URL('../projects/car-garage/assets/model.glb', import.meta.url),
+    );
+    assert.equal(
+      createHash('sha256').update(bytes).digest('hex'),
+      'c272098089d78c5cd9fd9f24ff50ee8acf8d932c55f2d55fc10adb6c8998966b',
+    );
+  }
+  if (project.id === 'watch-explorer' || project.id === 'vinyl-room') {
+    const material =
+      project.id === 'watch-explorer' ? model.parts.strap : model.parts.wood;
+    assert.ok(
+      material.normalMap && material.roughnessMap,
+      'Photographic surface maps must be loaded',
+    );
+    assert.equal(material.normalMap.colorSpace, T.NoColorSpace);
+    if (material.map) assert.equal(material.map.colorSpace, T.SRGBColorSpace);
   }
   if (project.id === 'sneaker-studio') {
     const choices = model.controls[0];

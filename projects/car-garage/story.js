@@ -40,8 +40,7 @@ export async function createStory({ lights, scene } = {}) {
     root = new T.Group(),
     car = rig(model, 5.5);
   root.add(car);
-  const { paint, enabled } = model.parts;
-  enabled.value = 1;
+  const { paint } = model.parts;
   const lines = new T.Group();
   root.add(lines);
   const roadMaterial = new T.MeshBasicMaterial({

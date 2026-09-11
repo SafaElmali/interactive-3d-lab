@@ -16,7 +16,16 @@ The base can model is “Soda Can” by Jeremy, via [Poly Pizza](https://poly.pi
 
 ## Car
 
-[ToyCar](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/ToyCar), Guido Odendahl / Eric Chadwick, under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Modifications: removed the display cloth and cameras, normalized scale, added paint masking and finish controls. The original license record is preserved in `projects/car-garage/MODEL-LICENSE.md`.
+[CarConcept](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/CarConcept), © 2024 Eric Chadwick / Darmstadt Graphics Group GmbH, under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Modifications: display scale and orientation, animated primary paint color, and clearcoat finish. Original interior, wheels, trim, and glass are retained. The original license record is preserved in `projects/car-garage/MODEL-LICENSE.md`; the Khronos logo notice is in `LICENSES/LicenseRef-LegalMark-Khronos.txt`.
+
+## Photographic materials and lighting
+
+All four Poly Haven assets below are [CC0](https://polyhaven.com/license). Local 1K maps and the HDR environment are used, with adjusted repeat, tint, and normal intensity. Source URLs, author roles, and file digests are recorded in `assets/materials/sources.json`.
+
+- [Dark Wood](https://polyhaven.com/a/dark_wood): Dario Barresi, Dimitrios Savva, and Rico Cilliers — turntable wood grain, normals, and roughness.
+- [Brown Leather](https://polyhaven.com/a/brown_leather): Rob Tuytel — watch strap normal and roughness maps, with custom strap colors.
+- [Concrete Wall 007](https://polyhaven.com/a/concrete_wall_007): Dario Barresi, Rico Cilliers, and Charlotte Baglioni — miniature architecture and pavement.
+- [Studio Small 08](https://polyhaven.com/a/studio_small_08): Sergej Majboroda — studio reflections and environment lighting.
 
 ## Libraries and fonts
 

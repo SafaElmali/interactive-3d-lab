@@ -10,6 +10,7 @@ for (const file of [
   'styles.css',
   'favicon.svg',
   'credits.html',
+  'LICENSES',
   'projects',
   'shared',
   'vendor',

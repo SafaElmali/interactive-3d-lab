@@ -1,6 +1,6 @@
 # After Hours
 
-The CC0 Khronos ToyCar model, with its display cloth removed.
+The detailed CarConcept model by Eric Chadwick / Darmstadt Graphics Group GmbH, via Khronos under CC BY 4.0. The model includes a complete interior, detailed wheels, transparent glass, and separate paint materials. Primary paint and camera composition follow scrolling.
 
 ## Run
 

@@ -71,7 +71,7 @@ export async function createStory() {
       arm.rotation.y = -0.55 * smooth(0.08, 0.31, p) * (1 - lift);
       arm.rotation.x = lift * -0.12;
       power.emissive.set('#e1dd84');
-      colorAt(['#8d5435', '#a37750', '#45382f', '#8d5435'], p, wood.color);
+      colorAt(['#ffffff', '#eedec5', '#b2aaa0', '#ffffff'], p, wood.color);
       const spread = smooth(0.48, 0.7, p);
       records.forEach((record, i) => {
         const side = i === 0 ? -1 : 1;

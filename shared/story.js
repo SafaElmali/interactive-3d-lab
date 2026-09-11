@@ -51,8 +51,10 @@ try {
 }
 
 async function start(story, createStory) {
-  ({ renderer, environment } = makeRenderer(document.querySelector('canvas')));
-  renderer.shadowMap.enabled = false;
+  ({ renderer, environment } = await makeRenderer(
+    document.querySelector('canvas'),
+  ));
+  renderer.shadowMap.enabled = true;
   renderer.setClearColor(0x000000, 0);
   const lights = makeScene(story.colors[0], environment.texture);
   const { scene } = lights;
@@ -68,6 +70,21 @@ async function start(story, createStory) {
   scene.add(world);
   const model = await createStory({ scene, lights, camera, renderer });
   world.add(model.root);
+  model.root.traverse((node) => {
+    if (!node.isMesh) return;
+    for (const material of Array.isArray(node.material)
+      ? node.material
+      : [node.material]) {
+      for (const value of Object.values(material))
+        if (value?.isTexture)
+          value.anisotropy = Math.min(
+            8,
+            renderer.capabilities.getMaxAnisotropy(),
+          );
+      // Transparent glass should not cast a solid, opaque shadow on its contents.
+      if (material.transmission > 0.5) node.castShadow = false;
+    }
+  });
   const chapters = [...document.querySelectorAll('.story-chapter')];
   const arts = chapters.map((n) => n.querySelector('.chapter-art'));
   const copies = chapters.map((n) => n.querySelector('.chapter-copy'));

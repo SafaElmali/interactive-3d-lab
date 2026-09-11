@@ -1,0 +1,139 @@
+{
+  "license": "CC0-1.0",
+  "license_url": "https://polyhaven.com/license",
+  "license_deed": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "assets": [
+    {
+      "id": "dark_wood",
+      "role": "turntable dark hardwood",
+      "source_page": "https://polyhaven.com/a/dark_wood",
+      "authors": {
+        "Dario Barresi": "Baking",
+        "Dimitrios Savva": "Photography",
+        "Rico Cilliers": "Tiling"
+      },
+      "dimensions_mm": [2000, 2000],
+      "description": "Free 8K texture: dark cherry/mahogany hardwood with warm red tones, fine grain and a smooth satin finish.",
+      "files": {
+        "Diffuse": {
+          "path": "assets/materials/dark_wood/dark_wood_diff_1k.jpg",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/dark_wood/dark_wood_diff_1k.jpg",
+          "bytes": 754754,
+          "md5": "47fa883f1bb33acc5711245f64b75975",
+          "colorspace": "sRGB",
+          "resolution": "1k"
+        },
+        "nor_gl": {
+          "path": "assets/materials/dark_wood/dark_wood_nor_gl_1k.jpg",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/dark_wood/dark_wood_nor_gl_1k.jpg",
+          "bytes": 344338,
+          "md5": "ca74ffa4c1b7ff5afe7316bbfa87f9a0",
+          "colorspace": "Linear / Non-Color",
+          "resolution": "1k"
+        },
+        "Rough": {
+          "path": "assets/materials/dark_wood/dark_wood_rough_1k.jpg",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/dark_wood/dark_wood_rough_1k.jpg",
+          "bytes": 574415,
+          "md5": "b1acb7bf90785d3945a85eca408dbc6c",
+          "colorspace": "Linear / Non-Color",
+          "resolution": "1k"
+        }
+      }
+    },
+    {
+      "id": "brown_leather",
+      "role": "watch strap",
+      "source_page": "https://polyhaven.com/a/brown_leather",
+      "authors": {
+        "Rob Tuytel": "All"
+      },
+      "dimensions_mm": [400.0000059604645, 400.00003576278687],
+      "description": "Free 8K texture of vintage matte brown leather - fine grain with soft wrinkles, creases and subtle wear for upholstery and seat surfaces.",
+      "files": {
+        "Diffuse": {
+          "path": "assets/materials/brown_leather/brown_leather_albedo_1k.jpg",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/brown_leather/brown_leather_albedo_1k.jpg",
+          "bytes": 503348,
+          "md5": "080b3bf1372766ff2c7ff121ed07b5e8",
+          "colorspace": "sRGB",
+          "resolution": "1k"
+        },
+        "nor_gl": {
+          "path": "assets/materials/brown_leather/brown_leather_nor_gl_1k.png",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/brown_leather/brown_leather_nor_gl_1k.png",
+          "bytes": 1925895,
+          "md5": "dce9f0828b9dd7c3fb560f6c27b7c6d0",
+          "colorspace": "Linear / Non-Color",
+          "resolution": "1k"
+        },
+        "Rough": {
+          "path": "assets/materials/brown_leather/brown_leather_rough_1k.png",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/brown_leather/brown_leather_rough_1k.png",
+          "bytes": 959330,
+          "md5": "0b8b2c76bbccb6811987f631d3ed4219",
+          "colorspace": "Linear / Non-Color",
+          "resolution": "1k"
+        }
+      }
+    },
+    {
+      "id": "concrete_wall_007",
+      "role": "city building masonry/concrete",
+      "source_page": "https://polyhaven.com/a/concrete_wall_007",
+      "authors": {
+        "Dario Barresi": "Processing",
+        "Rico Cilliers": "Tiling",
+        "Charlotte Baglioni": "Photography"
+      },
+      "dimensions_mm": [2159.9998474121094, 2159.9998474121094],
+      "description": "Free 8K texture of weathered concrete wall with plaster patches: rough, pitted surface, horizontal formboard lines, cracks, chips, stains and dirty grey tones.",
+      "files": {
+        "Diffuse": {
+          "path": "assets/materials/concrete_wall_007/concrete_wall_007_diff_1k.jpg",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_wall_007/concrete_wall_007_diff_1k.jpg",
+          "bytes": 654485,
+          "md5": "f8a951200ebe1a42ba57ef331d94f8e2",
+          "colorspace": "sRGB",
+          "resolution": "1k"
+        },
+        "nor_gl": {
+          "path": "assets/materials/concrete_wall_007/concrete_wall_007_nor_gl_1k.jpg",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_wall_007/concrete_wall_007_nor_gl_1k.jpg",
+          "bytes": 602349,
+          "md5": "7d62088fb4f40833226cdb2a09476a58",
+          "colorspace": "Linear / Non-Color",
+          "resolution": "1k"
+        },
+        "Rough": {
+          "path": "assets/materials/concrete_wall_007/concrete_wall_007_rough_1k.jpg",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_wall_007/concrete_wall_007_rough_1k.jpg",
+          "bytes": 563812,
+          "md5": "57fc45c0410543a5117bbfab360e040a",
+          "colorspace": "Linear / Non-Color",
+          "resolution": "1k"
+        }
+      }
+    },
+    {
+      "id": "studio_small_08",
+      "role": "product lighting and softbox reflections",
+      "source_page": "https://polyhaven.com/a/studio_small_08",
+      "authors": {
+        "Sergej Majboroda": "All"
+      },
+      "dimensions_mm": null,
+      "description": "Free 16K HDRI, unclipped, soft, low-contrast indoor studio lighting with large softboxes and octabox highlights, neutral tone and even wraparound illumination.",
+      "files": {
+        "hdri": {
+          "path": "assets/materials/studio_small_08/studio_small_08_1k.hdr",
+          "source_url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr",
+          "bytes": 1508872,
+          "md5": "de3ba64222895aca876b1d1c2e0cf81a",
+          "colorspace": "Linear / Non-Color",
+          "resolution": "1k"
+        }
+      }
+    }
+  ]
+}

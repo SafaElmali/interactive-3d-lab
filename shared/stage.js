@@ -1,23 +1,40 @@
 import * as T from 'three';
 import { OrbitControls } from '../vendor/OrbitControls.js';
 import { RoomEnvironment } from '../vendor/RoomEnvironment.js';
-export function makeRenderer(canvas) {
+import { RGBELoader } from '../vendor/RGBELoader.js';
+export async function makeRenderer(canvas) {
   const renderer = new T.WebGLRenderer({
     canvas,
     antialias: true,
     alpha: true,
     powerPreference: 'high-performance',
   });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.outputColorSpace = T.SRGBColorSpace;
   renderer.toneMapping = T.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.2;
+  renderer.toneMappingExposure = 1.02;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = T.PCFSoftShadowMap;
-  const pmrem = new T.PMREMGenerator(renderer),
-    room = new RoomEnvironment();
-  const environment = pmrem.fromScene(room, 0.04);
-  room.dispose();
+  const pmrem = new T.PMREMGenerator(renderer);
+  let environment;
+  try {
+    const hdri = await new RGBELoader().loadAsync(
+      new URL(
+        '../assets/materials/studio_small_08/studio_small_08_1k.hdr',
+        import.meta.url,
+      ).href,
+    );
+    environment = pmrem.fromEquirectangular(hdri);
+    hdri.dispose();
+  } catch (error) {
+    console.warn(
+      'Studio environment unavailable; using local lighting.',
+      error,
+    );
+    const room = new RoomEnvironment();
+    environment = pmrem.fromScene(room, 0.02);
+    room.dispose();
+  }
   pmrem.dispose();
   return { renderer, environment };
 }
@@ -25,11 +42,13 @@ export function makeScene(background, environment) {
   const scene = new T.Scene();
   scene.background = new T.Color(background);
   scene.environment = environment;
-  scene.add(new T.HemisphereLight('#ffffff', '#737985', 2.1));
-  const key = new T.DirectionalLight('#fff7e9', 3.2);
-  key.position.set(4, 8, 5);
+  scene.environmentIntensity = 0.75;
+  scene.environmentRotation.y = 0.45;
+  scene.add(new T.HemisphereLight('#dce5ed', '#16191c', 0.42));
+  const key = new T.DirectionalLight('#fff2dc', 2.7);
+  key.position.set(-3.5, 6, 5);
   key.castShadow = true;
-  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.mapSize.set(2048, 2048);
   Object.assign(key.shadow.camera, {
     left: -6,
     right: 6,
@@ -39,9 +58,11 @@ export function makeScene(background, environment) {
     far: 30,
   });
   key.shadow.bias = -0.0005;
+  key.shadow.normalBias = 0.025;
+  key.shadow.radius = 3;
   scene.add(key);
-  const rim = new T.DirectionalLight('#cfddff', 1.4);
-  rim.position.set(-4, 2, -5);
+  const rim = new T.DirectionalLight('#c9dcff', 1.7);
+  rim.position.set(4, 2.5, -4);
   scene.add(rim);
   return { scene, key, rim };
 }

@@ -98,11 +98,11 @@ export async function createStory({ scene, lights } = {}) {
       moon.material.color.set('#ffdb91').lerp(new T.Color('#e8eeff'), night);
       stars.object.material.opacity = night * 0.65;
       if (lights) {
-        lights.key.intensity = mix(3.2, 0.7, night);
+        lights.key.intensity = mix(2.7, 0.7, night);
         lights.key.color.set('#fff1d4').lerp(new T.Color('#adcaff'), night);
         lights.rim.intensity = mix(1.4, 1.1, night);
-        hemisphere.intensity = mix(2.1, 0.4, night);
-        scene.environmentIntensity = mix(1, 0.25, night);
+        hemisphere.intensity = mix(0.42, 0.12, night);
+        scene.environmentIntensity = mix(0.75, 0.25, night);
       }
     },
   };

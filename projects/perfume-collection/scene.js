@@ -1,47 +1,76 @@
-import { T, mat, metal, box, cylinder, label } from '../../shared/geometry.js';
+import {
+  T,
+  mat,
+  metal,
+  box,
+  cylinder,
+  label,
+  torus,
+} from '../../shared/geometry.js';
+import { microfinish } from '../../shared/materials.js';
 export async function create() {
   const root = new T.Group();
   const bottle = new T.Group(),
     cap = new T.Group();
   root.add(bottle, cap);
   const glass = new T.MeshPhysicalMaterial({
-    color: '#fff5e5',
-    transmission: 0.96,
-    thickness: 0.35,
-    roughness: 0.07,
+    color: '#fffcf6',
+    transmission: 1,
+    thickness: 0.16,
+    attenuationColor: '#e8ddc4',
+    attenuationDistance: 4,
+    roughness: 0.035,
     ior: 1.48,
     metalness: 0,
     clearcoat: 1,
+    clearcoatRoughness: 0.035,
   });
   bottle.add(box(1.7, 2.5, 0.9, glass, [0, 0, 0], 0.2));
   const liquid = new T.MeshPhysicalMaterial({
     color: '#c99a43',
-    transmission: 0.35,
-    transparent: true,
-    opacity: 0.86,
+    // The liquid must enter the opaque buffer to be visible through the glass.
+    transmission: 0,
+    clearcoat: 1,
+    clearcoatRoughness: 0.08,
     roughness: 0.1,
     ior: 1.36,
   });
   bottle.add(box(1.43, 1.85, 0.67, liquid, [0, -0.2, 0], 0.12));
+  const heavyBase = glass.clone();
+  heavyBase.thickness = 0.35;
+  bottle.add(box(1.56, 0.17, 0.76, heavyBase, [0, -1.11, 0], 0.11));
+  for (const y of [1.3, 1.48, 1.58])
+    bottle.add(torus(0.19, 0.018, metal('#d8c08e'), [0, y, 0]));
   bottle.add(cylinder(0.18, 0.45, metal('#cbb58a'), [0, 1.45, 0]));
   bottle.add(cylinder(0.13, 0.2, metal('#e8d6b0'), [0, 1.74, 0]));
   bottle.add(box(0.09, 0.035, 0.08, mat('#35342d'), [0, 1.77, 0.135], 0.01));
   const dipTube = cylinder(0.018, 1.9, mat('#e9d9b8'), [0, 0.01, 0]);
   bottle.add(dipTube);
-  const capMaterial = mat('#3c3025', 0.25, 0.15);
+  const capMaterial = microfinish(mat('#3c3025', 0.21, 0.08), 250, 0.045);
+  capMaterial.clearcoat = 0.85;
+  capMaterial.clearcoatRoughness = 0.12;
   cap.add(box(0.66, 0.72, 0.66, capMaterial, [0, 1.66, 0], 0.075));
   const band = metal('#d9c59f');
   cap.add(box(0.69, 0.045, 0.69, band, [0, 1.33, 0], 0.05));
-  const front = label('ESSENCE\nNO. 01', 1.18, 0.87, [0, -0.1, 0.456], {
+  bottle.add(box(1.25, 0.94, 0.01, band, [0, -0.1, 0.45], 0.015));
+  const front = label('E S S E N C E\nNO. 01', 1.18, 0.87, [0, -0.1, 0.462], {
     background: '#eee7d6',
     color: '#2e2b24',
-    width: 512,
-    height: 384,
-    size: 50,
+    width: 1024,
+    height: 768,
+    size: 86,
     font: 'serif',
     weight: '400',
   });
   bottle.add(front);
+  const seal = label('PARIS  ·  EXTRAIT', 0.87, 0.09, [0, -0.39, 0.464], {
+    width: 1024,
+    height: 128,
+    size: 60,
+    color: '#75613e',
+    weight: '400',
+  });
+  bottle.add(seal);
   const small = label('EAU DE PARFUM  /  50 ML', 1.3, 0.12, [0, -0.88, 0.455], {
     size: 24,
     color: '#50412a',

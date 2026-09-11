@@ -32,7 +32,7 @@ async function startGallery() {
   canvas.className = 'gallery-canvas';
   canvas.setAttribute('aria-hidden', 'true');
   document.body.append(canvas);
-  const { renderer, environment } = makeRenderer(canvas);
+  const { renderer, environment } = await makeRenderer(canvas);
   renderer.shadowMap.enabled = false;
   renderer.setSize(innerWidth, innerHeight);
   renderer.setScissorTest(true);

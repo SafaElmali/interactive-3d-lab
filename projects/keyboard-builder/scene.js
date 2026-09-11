@@ -1,4 +1,14 @@
-import { T, mat, metal, box, label } from '../../shared/geometry.js';
+import {
+  T,
+  mat,
+  metal,
+  box,
+  label,
+  keycap,
+  cylinder,
+  torus,
+} from '../../shared/geometry.js';
+import { microfinish } from '../../shared/materials.js';
 import { keySound } from '../../shared/audio.js';
 export async function create({ preview = false } = {}) {
   const root = new T.Group(),
@@ -6,13 +16,49 @@ export async function create({ preview = false } = {}) {
     board = new T.Group(),
     caps = new T.Group();
   root.add(base, board, caps);
-  const shell = metal('#c7bdde'),
-    keyMaterial = mat('#f4f0e8', 0.37),
-    accent = mat('#9989c7', 0.32),
-    dark = mat('#66617e', 0.4);
+  const shell = microfinish(metal('#c7bdde'), 250, 0.06),
+    keyMaterial = microfinish(mat('#f4f0e8', 0.43), 350, 0.11),
+    accent = microfinish(mat('#9989c7', 0.38), 350, 0.09),
+    dark = microfinish(mat('#66617e', 0.43), 350, 0.11);
   base.add(box(5.7, 0.36, 2.15, shell, [0, 0, 0], 0.2));
   base.add(box(5.47, 0.08, 1.97, mat('#292936'), [0, 0.2, 0], 0.14));
   board.add(box(5.35, 0.05, 1.9, mat('#234c40'), [0, 0.3, 0], 0.12));
+  const traces = metal('#b79751');
+  for (let i = 0; i < 14; i++) {
+    const x = -2.4 + i * 0.37;
+    board.add(box(0.012, 0.004, 1.62, traces, [x, 0.33, 0], 0.001));
+    board.add(
+      box(
+        0.25,
+        0.004,
+        0.015,
+        traces,
+        [x + 0.1, 0.332, ((i % 5) - 2) * 0.3],
+        0.001,
+      ),
+    );
+    board.add(box(0.09, 0.035, 0.12, mat('#202725'), [x, 0.35, 0.7], 0.007));
+  }
+  base.add(box(0.38, 0.12, 0.05, mat('#121718'), [2.16, 0.02, -1.08], 0.04));
+  base.add(box(0.25, 0.035, 0.055, metal(), [2.16, 0.02, -1.105], 0.015));
+  for (const x of [-2.2, 2.2])
+    for (const z of [-0.72, 0.72])
+      base.add(cylinder(0.15, 0.055, mat('#202323'), [x, -0.2, z]));
+  const maker = label(
+    'KEY / FORM   ·   NO. 003',
+    1.55,
+    0.1,
+    [0, -0.025, 1.077],
+    { width: 1024, height: 96, size: 43, color: '#29332b' },
+  );
+  base.add(maker);
+  const switchHousing = new T.MeshPhysicalMaterial({
+    color: '#dbe6e2',
+    transmission: 0.32,
+    roughness: 0.18,
+    thickness: 0.04,
+    clearcoat: 1,
+  });
   const underglow = new T.MeshStandardMaterial({
     color: '#be83ff',
     emissive: '#be83ff',
@@ -60,7 +106,7 @@ export async function create({ preview = false } = {}) {
       g.position.set(x, 0.48, (r - 2) * 0.382);
       g.userData = { character, pressedUntil: 0 };
       g.add(
-        box(
+        keycap(
           w,
           0.23,
           0.34,
@@ -69,8 +115,6 @@ export async function create({ preview = false } = {}) {
             : character === 'Space'
               ? dark
               : keyMaterial,
-          [0, 0, 0],
-          0.042,
         ),
       );
       if (character !== 'Space') {
@@ -78,11 +122,11 @@ export async function create({ preview = false } = {}) {
           character,
           Math.min(w * 0.65, 0.27),
           0.15,
-          [0, 0.118, 0],
+          [0, 0.104, 0],
           {
-            width: 128,
-            height: 64,
-            size: character.length > 2 ? 25 : 38,
+            width: 256,
+            height: 128,
+            size: character.length > 2 ? 50 : 76,
             color: '#39374b',
           },
         );
@@ -90,7 +134,8 @@ export async function create({ preview = false } = {}) {
         g.add(legend);
       }
       const stem = box(0.09, 0.17, 0.09, accent, [0, -0.2, 0], 0.01);
-      g.add(stem);
+      g.add(stem, box(0.24, 0.08, 0.26, switchHousing, [0, -0.19, 0], 0.025));
+      g.add(torus(0.045, 0.009, traces, [0, -0.245, 0]));
       caps.add(g);
       keyGroups.push(g);
     });
@@ -109,7 +154,17 @@ export async function create({ preview = false } = {}) {
   ];
   return {
     root,
-    parts: { base, board, caps, keyGroups, shell, keyMaterial, accent, dark, underglow },
+    parts: {
+      base,
+      board,
+      caps,
+      keyGroups,
+      shell,
+      keyMaterial,
+      accent,
+      dark,
+      underglow,
+    },
     angle: [2.6, 5, 4.2],
     controls: [
       {
