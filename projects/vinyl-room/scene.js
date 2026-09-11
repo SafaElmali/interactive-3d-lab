@@ -122,6 +122,7 @@ export async function create({ preview = false } = {}) {
   }
   return {
     root,
+    parts: { disc, arm, platter, wood, recordColor, power },
     angle: [3, 4.8, 4.5],
     controls: [
       {

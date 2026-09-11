@@ -1,0 +1,454 @@
+@import "../styles.css";
+html {
+  min-height: 100%;
+  background: #101214;
+  scroll-behavior: auto;
+}
+body.scroll-story {
+  --ink: #191916;
+  margin: 0;
+  color: var(--ink);
+  overflow-x: clip;
+}
+.story-header {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 88px;
+  padding: 0 4vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  z-index: 10;
+  font:
+    14px Mono,
+    monospace;
+}
+.story-header a {
+  text-decoration: none;
+  padding: 12px 0;
+}
+.story-header a:last-child {
+  font-family: Barlow, sans-serif;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+}
+.story-header small {
+  font:
+    12px Mono,
+    monospace;
+  margin-left: 10px;
+}
+.story-header > span {
+  opacity: 0.65;
+}
+.story-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+.story-track {
+  margin: 0;
+  max-width: none;
+  position: relative;
+}
+.story-chapter {
+  height: 130svh;
+  pointer-events: none;
+}
+.story-chapter:last-child {
+  height: 100svh;
+}
+.chapter-art {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.chapter-heading {
+  position: absolute;
+  top: 16%;
+  left: 4%;
+  width: 92%;
+  margin: 0;
+  font:
+    800 clamp(70px, 19vw, 340px)/0.82 Barlow,
+    Impact,
+    sans-serif;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  text-align: center;
+}
+.chapter-heading span {
+  display: block;
+}
+.chapter-heading em {
+  font: inherit;
+  font-style: normal;
+  -webkit-text-stroke: 1.5px var(--ink);
+  color: transparent;
+}
+.chapter-copy {
+  position: fixed;
+  left: 6%;
+  bottom: 16%;
+  width: 270px;
+  z-index: 5;
+  will-change: transform, opacity;
+}
+.chapter-label {
+  font:
+    13px/1.5 Mono,
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.chapter-copy p {
+  font:
+    16px/1.6 Arial,
+    sans-serif;
+  margin: 15px 0 0;
+  max-width: 27ch;
+}
+.layout-left .chapter-heading {
+  text-align: left;
+  top: 22%;
+  left: 6%;
+  width: 43%;
+  font-size: clamp(65px, 12vw, 220px);
+}
+.layout-right .chapter-heading {
+  text-align: right;
+  left: 52%;
+  width: 42%;
+  top: 22%;
+  font-size: clamp(65px, 12vw, 220px);
+}
+.layout-right .chapter-copy {
+  left: auto;
+  right: 6%;
+  text-align: right;
+}
+.layout-right .chapter-copy p {
+  margin-left: auto;
+}
+.layout-finale .chapter-heading {
+  top: 16%;
+}
+.layout-finale .chapter-copy {
+  bottom: 13%;
+}
+.next-story {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  margin-top: 22px;
+  padding: 12px 0;
+  border-bottom: 1px solid currentColor;
+  text-decoration: none;
+  font:
+    14px Mono,
+    monospace;
+  pointer-events: auto;
+}
+.next-story span {
+  font: 24px Arial;
+}
+.story-footer {
+  position: fixed;
+  inset: auto 4vw 25px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  z-index: 10;
+  font:
+    12px Mono,
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.scroll-cue {
+  min-width: 190px;
+}
+.scroll-cue span {
+  display: inline-block;
+  margin-left: 8px;
+}
+.story-progress {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--ink) 20%, transparent);
+}
+.story-progress span {
+  height: 2px;
+  display: block;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.story-credits {
+  margin-left: 16px;
+  text-decoration: none;
+  padding: 10px 0;
+}
+.story-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 67% 40%, #ffffff16, transparent 60%);
+}
+.story-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #171a18;
+  color: #f1f3eb;
+}
+.story-loading > span {
+  font:
+    64px Barlow,
+    sans-serif;
+}
+.story-loading p {
+  font:
+    14px Mono,
+    monospace;
+}
+.theme-sole .chapter-heading {
+  font-style: italic;
+}
+.theme-sole .layout-hero .chapter-heading {
+  transform: rotate(-6deg);
+  top: 19%;
+}
+.theme-keys .chapter-heading {
+  font-family: Mono, monospace;
+  font-weight: 500;
+  font-size: 13vw;
+  letter-spacing: -0.08em;
+  line-height: 0.95;
+}
+.theme-keys .layout-left .chapter-heading {
+  font-size: 9vw;
+}
+.theme-keys .story-backdrop {
+  background-image:
+    linear-gradient(#94988a15 1px, transparent 1px),
+    linear-gradient(90deg, #94988a15 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
+}
+.theme-essence .chapter-heading,
+.theme-ritual .chapter-heading {
+  font-family: Playfair, Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13vw;
+  text-transform: none;
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+.theme-essence .layout-left .chapter-heading,
+.theme-ritual .layout-left .chapter-heading {
+  font-size: 10vw;
+}
+.theme-essence .story-backdrop {
+  background: radial-gradient(ellipse at 64% 42%, #ffc66940, transparent 57%);
+}
+.theme-vinyl .chapter-heading {
+  font-size: 26vw;
+  letter-spacing: -0.02em;
+  text-align: left;
+  left: 6%;
+  top: 16%;
+  transform: rotate(-6deg);
+}
+.theme-vinyl .layout-left .chapter-heading {
+  font-size: 14vw;
+}
+.theme-vinyl .layout-right .chapter-heading {
+  font-size: 14vw;
+  text-align: right;
+  left: 52%;
+}
+.theme-vinyl .story-backdrop {
+  background: repeating-radial-gradient(
+    circle at 70% 45%,
+    transparent 0 43px,
+    #f7dfac12 44px 45px,
+    transparent 46px 90px
+  );
+}
+.theme-time .chapter-heading {
+  font-weight: 400;
+  font-size: 18vw;
+  letter-spacing: -0.02em;
+}
+.theme-time .layout-left .chapter-heading {
+  font-size: 12vw;
+}
+.theme-time .story-backdrop {
+  background: radial-gradient(ellipse at 50% 50%, #7a8da833, transparent 65%);
+}
+.theme-city .chapter-heading {
+  font-size: 21vw;
+}
+.theme-city .layout-left .chapter-heading,
+.theme-city .layout-right .chapter-heading {
+  font-size: 12vw;
+}
+.theme-drive .chapter-heading {
+  font-style: italic;
+  font-size: 21vw;
+}
+.theme-drive .layout-left .chapter-heading,
+.theme-drive .layout-right .chapter-heading {
+  font-size: 12vw;
+}
+.theme-drive .story-backdrop {
+  background: linear-gradient(
+    130deg,
+    transparent 35%,
+    #ceff0015 50%,
+    transparent 65%
+  );
+}
+.theme-ritual .layout-right .chapter-heading {
+  font-size: 10vw;
+}
+@media (min-width: 1800px) {
+  .story-track {
+    max-width: none;
+    margin: 0;
+  }
+}
+@media (max-width: 760px) {
+  .story-header {
+    height: 68px;
+    padding: 0 22px;
+    font-size: 12px;
+  }
+  .story-header > span {
+    display: none;
+  }
+  .story-header a:last-child {
+    font-size: 21px;
+  }
+  .story-chapter {
+    height: 135svh;
+  }
+  .chapter-heading,
+  .layout-left .chapter-heading,
+  .layout-right .chapter-heading {
+    width: 90%;
+    left: 5%;
+    top: 18%;
+    text-align: center;
+    font-size: 24vw;
+  }
+  .chapter-heading span {
+    display: inline;
+  }
+  .chapter-heading span + span::before {
+    content: " ";
+  }
+  .chapter-copy,
+  .layout-right .chapter-copy,
+  .layout-finale .chapter-copy {
+    left: 24px;
+    right: 24px;
+    bottom: 13%;
+    width: auto;
+    max-width: 320px;
+    text-align: left;
+  }
+  .chapter-copy p,
+  .layout-right .chapter-copy p {
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 8px 0 0;
+    max-width: 34ch;
+  }
+  .chapter-label {
+    font-size: 12px;
+  }
+  .next-story {
+    margin-top: 9px;
+    font-size: 13px;
+    padding: 8px 0;
+  }
+  .story-footer {
+    inset: auto 22px 19px;
+    gap: 14px;
+    font-size: 12px;
+  }
+  .scroll-cue {
+    min-width: auto;
+  }
+  .story-credits {
+    display: none;
+  }
+  .act-counter {
+    white-space: nowrap;
+  }
+  .theme-keys .chapter-heading,
+  .theme-keys .layout-left .chapter-heading {
+    font-size: 19vw;
+  }
+  .theme-essence .chapter-heading,
+  .theme-essence .layout-left .chapter-heading,
+  .theme-ritual .chapter-heading,
+  .theme-ritual .layout-left .chapter-heading,
+  .theme-ritual .layout-right .chapter-heading {
+    font-size: 20vw;
+  }
+  .theme-vinyl .chapter-heading,
+  .theme-vinyl .layout-left .chapter-heading,
+  .theme-vinyl .layout-right .chapter-heading {
+    font-size: 28vw;
+    width: 90%;
+    left: 5%;
+    text-align: center;
+  }
+  .theme-time .chapter-heading,
+  .theme-time .layout-left .chapter-heading {
+    font-size: 23vw;
+  }
+  .theme-city .chapter-heading,
+  .theme-city .layout-left .chapter-heading,
+  .theme-city .layout-right .chapter-heading,
+  .theme-drive .chapter-heading,
+  .theme-drive .layout-left .chapter-heading,
+  .theme-drive .layout-right .chapter-heading {
+    font-size: 25vw;
+  }
+}
+@media (max-height: 600px) and (min-width: 761px) {
+  .story-header {
+    height: 60px;
+  }
+  .chapter-copy {
+    bottom: 17%;
+  }
+  .chapter-copy p {
+    font-size: 14px;
+  }
+  .chapter-heading {
+    font-size: 16vw;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chapter-art,
+  .chapter-copy {
+    will-change: auto;
+  }
+}

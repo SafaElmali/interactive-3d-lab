@@ -1,8 +1,8 @@
 # Object Lab
 
-Nine interactive 3D projects, one homepage, and a separate folder for every experiment.
+Nine scroll-driven 3D stories, one homepage, and a separate folder for every experiment.
 
-**Gallery:** https://object-lab-safa.safaelmali.chatgpt.site
+**Gallery:** https://object-lab-safa.netlify.app
 
 **Repository:** https://github.com/SafaElmali/interactive-3d-lab
 
@@ -17,44 +17,55 @@ npm run dev
 Open http://127.0.0.1:4320/. Each project is also directly accessible at `/projects/<folder>/`.
 
 ```sh
-npm run check  # Syntax, links, GLB integrity, geometry, and control-state checks
+npm run check  # Syntax, links, GLB integrity, geometry, scroll poses, and reverse-scroll checks
 npm run build  # Copies the deployable site into dist/
 ```
 
 ## Projects
 
-| Folder                         | Experience    | Interactions                                                                 |
-| ------------------------------ | ------------- | ---------------------------------------------------------------------------- |
-| `projects/can-do/`             | CAN/DO        | Drag the can lineup; scroll through four compositions                        |
-| `projects/sneaker-studio/`     | Sole Studio   | Three original colorways, roughness, turntable                               |
-| `projects/keyboard-builder/`   | Key / Form    | Palettes, exploded layers, clickable/typeable keys, switch sounds, underglow |
-| `projects/perfume-collection/` | Essence       | Fragrance colors, cap lift, spray mist, frosted glass                        |
-| `projects/vinyl-room/`         | Side A        | Record playback, local audio file, platter speed, plinth finish              |
-| `projects/watch-explorer/`     | Second Nature | Strap/dial colors, exploded case, local time, accelerated hands              |
-| `projects/miniature-city/`     | Small Hours   | Day/night, moving traffic, building selection                                |
-| `projects/car-garage/`         | After Hours   | Masked paint colors, lighting, turntable, clearcoat                          |
-| `projects/coffee-journey/`     | Daily Ritual  | Roast/grind/brew stages, milk, roast, cup colors, steam                      |
+| Folder                         | Experience    | Scroll sequence                                                        |
+| ------------------------------ | ------------- | ---------------------------------------------------------------------- |
+| `projects/can-do/`             | CAN/DO        | Original lineup, featured can, back label, regroup                     |
+| `projects/sneaker-studio/`     | Sole Studio   | Floating colorways, airborne spin, outsole reveal, reunion             |
+| `projects/keyboard-builder/`   | Key / Form    | Key wave, exploded layers, scattered caps, reassembly                  |
+| `projects/perfume-collection/` | Essence       | Suspended bottle, lifting cap, drifting mist, fragrance trio           |
+| `projects/vinyl-room/`         | Side A        | Turntable, needle drop, levitating record, orbiting discs              |
+| `projects/watch-explorer/`     | Second Nature | Watch portrait, exploded case, turning cogs, reassembly                |
+| `projects/miniature-city/`     | Small Hours   | Floating buildings, golden hour, illuminated night, flyover            |
+| `projects/car-garage/`         | After Hours   | Night portrait, paint and angle changes, moving light gates, final lap |
+| `projects/coffee-journey/`     | Daily Ritual  | Bean cloud, grinder, pouring coffee, steaming cup                      |
 
 ## Structure
 
 ```text
 index.html / home.js / styles.css   Gallery with live 3D previews
-projects/<project>/                Standalone entry point and scene.js
-shared/                            Viewer, controls, geometry helpers, sound, registry
+projects/<project>/                Standalone entry point, scene.js, and story.js
+shared/                            Scroll renderer, choreography helpers, geometry, registry
 vendor/                            Pinned Three.js 0.179.1 and addons
 assets/                            Shared fonts and source metadata
 scripts/                           Development server, checks, static build
 .openai/hosting.json                Private Sites hosting configuration
 ```
 
-Each new scene exports an asynchronous `create(context)` function returning a Three.js `root`, optional `controls`, an `update(time, delta, context)` function, camera angle, and credits. The homepage uses these same models for its previews, rendered with one shared WebGL context. Full project pages load only the requested scene. CAN/DO retains its original independent scroll-based implementation.
+Each `scene.js` provides the shared 3D model for the gallery and the full experience. Each of the eight new `story.js` files owns its art direction, four chapter texts, palette, and scroll choreography. `shared/story.js` handles rendering, native document scrolling, text transitions, loading, and navigation. `shared/choreography.js` contains deterministic interpolation helpers. CAN/DO retains its original independent implementation.
 
-## Notes
+## Motion and accessibility
 
-- Audio starts only after a user action. Uploaded tracks stay on the device and are never sent to a server.
-- The shared viewer supports mouse/touch orbiting, scroll zoom, keyboard arrows, and reset. Keyboard keys take priority in the keyboard scene.
-- Rendering pauses in hidden tabs; reduced-motion preferences suppress time-driven decorative motion.
-- Models and fonts work without third-party asset requests.
-- The automated scene checks use real geometry with image-loading stubs. They check controls and transforms, not browser rendering, visual quality, GPU shaders, or audible output. Browser QA has not been performed.
+- Scroll using a wheel, trackpad, touch, or the browser’s standard keyboard controls. The canvas never captures scrolling or dragging.
+- There are no customization panels. Scene motion, color changes, exploded views, and transitions follow scroll position and work in reverse.
+- Reduced motion presents static chapter compositions without spins, parallax, or time-driven movement.
+- Rendering pauses in hidden tabs and resumes after browser history restoration.
+- Each final chapter links to the next project; the collection and source credits remain available throughout.
+- Models, textures, and fonts are local. No third-party asset requests or autoplay audio are needed.
+- The automated checks use real geometry with image-loading stubs. They verify 122 forward scroll poses per story across desktop and mobile camera proportions, reverse-scroll determinism, reduced-motion chapter states, and local routes. They do not render pixels or test GPU shaders. Browser visual QA has not been performed.
 
-See [CREDITS.md](CREDITS.md) for the original assets, modifications, and licenses. This is a collection of interactive studies; the watch movement, city, and coffee stages are illustrative models.
+## Deploy to Netlify
+
+The Netlify project is `object-lab-safa`. Build settings are in `netlify.toml`; `dist/` contains only the public site. The current project uses manual deployments:
+
+```sh
+npm run check && npm run build
+netlify deploy --prod --dir dist
+```
+
+See [CREDITS.md](CREDITS.md) for original assets, modifications, and licenses. The watch movement, city, and coffee stages are illustrative models.

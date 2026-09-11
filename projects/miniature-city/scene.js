@@ -147,6 +147,7 @@ export async function create({ preview = false, scene, lights } = {}) {
   }
   return {
     root,
+    parts: { buildings, cars, windowMaterial, lampMaterial, lawn },
     angle: [5, 4.5, 5],
     controls: [
       {

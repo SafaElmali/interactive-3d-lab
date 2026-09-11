@@ -41,6 +41,7 @@ export async function create({ scene, lights } = {}) {
     night = 0;
   return {
     root,
+    parts: { paint, enabled, bodyMaterials },
     angle: [5, 2.6, 5],
     controls: [
       {

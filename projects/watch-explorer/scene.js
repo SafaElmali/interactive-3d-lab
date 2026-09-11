@@ -120,6 +120,7 @@ export async function create() {
   ];
   return {
     root,
+    parts: { caseGroup, face, crystal, movement, hours, minutes, seconds, strap, dial, steel },
     angle: [2.3, 5, 4.5],
     controls: [
       {

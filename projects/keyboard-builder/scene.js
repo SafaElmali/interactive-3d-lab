@@ -109,6 +109,7 @@ export async function create({ preview = false } = {}) {
   ];
   return {
     root,
+    parts: { base, board, caps, keyGroups, shell, keyMaterial, accent, dark, underglow },
     angle: [2.6, 5, 4.2],
     controls: [
       {

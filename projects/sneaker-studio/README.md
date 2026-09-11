@@ -6,12 +6,12 @@ A textured Shopify sneaker with three original material variants.
 
 From the repository root, run `npm run dev` and open http://127.0.0.1:4320/projects/sneaker-studio/.
 
-## Interaction
+## Scroll story
 
-Switch colorways, adjust surface roughness, or enable the turntable.
+Scroll to move through four animated compositions. The experience follows document scroll and reverses naturally. No customization controls are required. Reduced motion uses static chapter poses.
 
 ## Files
 
-`index.html` is the standalone entry point. `scene.js` owns this project’s model, controls, and animation. Shared rendering and interface code lives in `../../shared/`.
+`index.html` is the standalone entry point. `scene.js` owns the model; `story.js` owns the art direction, chapter copy, and scroll choreography. Shared rendering and interface code lives in `../../shared/`.
 
 Model and font attribution is recorded in the root `CREDITS.md`.

@@ -90,3 +90,100 @@ for (const project of projects) {
     `${project.id}: ${objects.length} meshes, controls and transforms valid`,
   );
 }
+
+// Exercise the actual story animations, including reversing and mobile framing.
+for (const project of projects.filter((p) => p.id !== 'can-do')) {
+  const { story, createStory } = await import(
+    `../projects/${project.id}/story.js`
+  );
+  assert.equal(story.chapters.length, 4);
+  assert.equal(story.colors.length, 4);
+  const scene = new T.Scene();
+  scene.add(new T.HemisphereLight());
+  const lights = {
+    key: new T.DirectionalLight(),
+    rim: new T.DirectionalLight(),
+  };
+  scene.add(lights.key, lights.rim);
+  const model = await createStory({ scene, lights });
+  const world = new T.Group();
+  world.add(model.root);
+  scene.add(world);
+  const camera = new T.PerspectiveCamera(40, 1, 0.1, 150);
+  camera.position.z = 11;
+  camera.updateMatrixWorld();
+  let count = 0;
+  for (const mobile of [false, true]) {
+    camera.aspect = mobile ? 390 / 844 : 1440 / 900;
+    camera.updateProjectionMatrix();
+    world.scale.setScalar(Math.min(1, camera.aspect / 1.15));
+    world.position.y = mobile ? -0.3 : -0.1;
+    const frustum = new T.Frustum().setFromProjectionMatrix(
+      new T.Matrix4().multiplyMatrices(
+        camera.projectionMatrix,
+        camera.matrixWorldInverse,
+      ),
+    );
+    for (let i = 0; i <= 60; i++) {
+      const p = i / 60;
+      model.update(p, 4, { mobile, reduced: false, dt: 1 / 60 });
+      scene.updateMatrixWorld(true);
+      let inView = 0;
+      model.root.traverseVisible((node) => {
+        assert.ok(
+          node.matrixWorld.elements.every(Number.isFinite),
+          `${project.id}: invalid transform at ${p}`,
+        );
+        if (node.isMesh && frustum.intersectsObject(node)) inView++;
+        if (node.isPoints)
+          assert.ok(
+            node.geometry.attributes.position.array.every(Number.isFinite),
+          );
+        if (node.isInstancedMesh)
+          assert.ok(node.instanceMatrix.array.every(Number.isFinite));
+      });
+      assert.ok(
+        inView > 0,
+        `${project.id}: empty camera view at ${p}, mobile=${mobile}`,
+      );
+      count++;
+    }
+    for (const p of [0, 1 / 3, 2 / 3, 1]) {
+      model.update(p, 0, { mobile, reduced: true, dt: 1 / 60 });
+      model.root.updateMatrixWorld(true);
+      model.root.traverse((node) =>
+        assert.ok(node.matrixWorld.elements.every(Number.isFinite)),
+      );
+    }
+  }
+  const snapshot = () => {
+    scene.updateMatrixWorld(true);
+    const state = [];
+    model.root.traverse((node) =>
+      state.push([node.visible, ...node.matrixWorld.elements]),
+    );
+    return state;
+  };
+  const context = { mobile: false, reduced: false, dt: 1 / 60 };
+  model.update(0.35, 4, context);
+  const before = snapshot();
+  model.update(0.92, 4, context);
+  model.update(0.35, 4, context);
+  assert.deepEqual(
+    snapshot(),
+    before,
+    `${project.id}: reverse scrolling must restore the same pose`,
+  );
+  const html = await readFile(
+    new URL(`../projects/${project.id}/index.html`, import.meta.url),
+    'utf8',
+  );
+  assert.ok(
+    html.includes('../../shared/story.js') && !html.includes('shared/studio.'),
+    `${project.id}: must load the scroll story`,
+  );
+  model.dispose?.();
+  console.log(
+    `${project.id}: ${count} scroll poses, reverse scrolling, mobile framing, and reduced motion valid`,
+  );
+}

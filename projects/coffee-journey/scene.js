@@ -105,6 +105,7 @@ export async function create() {
   grinder.visible = false;
   return {
     root,
+    parts: { cup, beans, grinder, crank, steam, steamMaterial, ceramic, coffee, roast, coffeeSurface, milk },
     angle: [3, 3.6, 5.5],
     controls: [
       {

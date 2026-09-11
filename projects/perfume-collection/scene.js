@@ -72,6 +72,7 @@ export async function create() {
   root.add(mist);
   return {
     root,
+    parts: { bottle, cap, liquid, capMaterial, glass, mist },
     angle: [2.4, 1.5, 6],
     controls: [
       {
