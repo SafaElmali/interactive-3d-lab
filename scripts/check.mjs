@@ -8,7 +8,8 @@ const root = path.resolve(fileURLToPath(new URL('../', import.meta.url)));
 async function walk(dir) {
   const out = [];
   for (const item of await readdir(dir, { withFileTypes: true })) {
-    if (['.git', 'dist', 'node_modules'].includes(item.name)) continue;
+    if (['.git', 'dist', 'node_modules', 'marketing'].includes(item.name))
+      continue;
     const p = path.join(dir, item.name);
     if (item.isDirectory()) out.push(...(await walk(p)));
     else out.push(p);

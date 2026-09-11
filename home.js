@@ -28,101 +28,224 @@ try {
   });
 }
 async function startGallery() {
-  const canvas = document.createElement('canvas');
-  canvas.className = 'gallery-canvas';
-  canvas.setAttribute('aria-hidden', 'true');
-  document.body.append(canvas);
-  const { renderer, environment } = await makeRenderer(canvas);
+  // One offscreen WebGL renderer feeds canvases inside the cards. The browser
+  // scrolls those cached images with the DOM, without waiting for a 3D frame.
+  const source = document.createElement('canvas');
+  const { renderer, environment } = await makeRenderer(source);
   renderer.shadowMap.enabled = false;
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.setScissorTest(true);
-  const items = [];
+  renderer.setPixelRatio(1);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const hoverCapable = matchMedia('(hover: hover)');
   let hovered = null;
-  gallery.addEventListener('pointerover', (e) => {
-    hovered =
-      e.target.closest('.project-card')?.querySelector('.preview')?.dataset
-        .project ?? null;
-  });
-  gallery.addEventListener('pointerleave', () => {
-    hovered = null;
-  });
-  const loading = Promise.all(
-    projects.map(async (project) => {
-      const element = document.querySelector(`[data-project="${project.id}"]`);
-      try {
-        const sceneModule = await import(`./projects/${project.id}/scene.js`);
-        const model = await sceneModule.create({ preview: true });
-        const { scene } = makeScene(project.background, environment.texture);
-        const bounds = setupModel(scene, model);
-        const camera = new T.PerspectiveCamera(35, 1, 0.01, 200);
-        items.push({
-          project,
-          element,
-          model,
-          scene,
-          bounds,
-          camera,
-          baseRotation: model.root.rotation.y,
-        });
-        element.classList.add('is-ready');
-      } catch (error) {
-        console.error(project.id, error);
-        element.classList.add('is-ready');
-        element.insertAdjacentHTML(
-          'beforeend',
-          '<span class="preview-error">Open the experiment ↗</span>',
-        );
+  let focused = null;
+  let request = 0;
+  let last = 0;
+  let loading = 0;
+  const items = projects.map((project) => {
+    const element = document.querySelector(`[data-project="${project.id}"]`);
+    const canvas = document.createElement('canvas');
+    canvas.className = 'preview-canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    element.append(canvas);
+    const item = {
+      project,
+      element,
+      canvas,
+      context: canvas.getContext('2d', { alpha: false }),
+      visible: false,
+      near: false,
+      loading: false,
+      failed: false,
+      dirty: true,
+      settling: false,
+      elapsed: 0,
+      width: 0,
+      height: 0,
+    };
+    const link = element.closest('.project-card');
+    link.addEventListener('pointerenter', (event) => {
+      if (hoverCapable.matches && event.pointerType !== 'touch') {
+        hovered = item;
+        schedule();
       }
-    }),
-  );
-  document.body.classList.add('webgl-ready');
-  let last = performance.now(),
-    elapsed = 0,
-    request;
+    });
+    link.addEventListener('pointerleave', () => {
+      if (hovered === item) hovered = null;
+      schedule();
+    });
+    link.addEventListener('focus', () => {
+      focused = item;
+      schedule();
+    });
+    link.addEventListener('blur', () => {
+      focused = null;
+      schedule();
+    });
+    return item;
+  });
+  const byElement = new Map(items.map((item) => [item.element, item]));
+  const active = (item) => !reduced.matches && item === (hovered ?? focused);
+
+  function schedule() {
+    if (!request && !document.hidden) request = requestAnimationFrame(frame);
+  }
+  function needsFrame(item) {
+    return (
+      item.visible &&
+      item.model &&
+      item.width > 0 &&
+      item.height > 0 &&
+      (item.dirty || item.settling || active(item))
+    );
+  }
   function frame(now) {
+    request = 0;
+    // Never redraw the entire grid. Cap the single animated cover at 30 fps.
+    if (now - last < 1000 / 30) {
+      if (items.some(needsFrame)) schedule();
+      return;
+    }
     const dt = Math.min((now - last) / 1000, 0.05);
     last = now;
-    elapsed += dt;
-    renderer.setScissorTest(false);
-    renderer.setClearColor(0x000000, 0);
-    renderer.clear();
-    renderer.setScissorTest(true);
-    for (const item of items) {
-      const r = item.element.getBoundingClientRect();
-      if (r.bottom < 0 || r.top > innerHeight) continue;
-      const active = hovered === item.project.id && !reduced.matches;
+    const candidates = items.filter(needsFrame);
+    const item = candidates.find((entry) => entry.dirty) ?? candidates[0];
+    if (!item) return;
+    try {
+      const isActive = active(item);
+      item.elapsed += dt;
+      const target =
+        item.baseRotation +
+        (isActive ? Math.sin(item.elapsed * 0.5) * 0.25 : 0);
       item.model.root.rotation.y = T.MathUtils.damp(
         item.model.root.rotation.y,
-        item.baseRotation + (active ? Math.sin(elapsed * 0.5) * 0.25 : 0),
+        target,
         5,
         dt,
       );
-      item.model.update?.(reduced.matches ? 0 : elapsed, dt, {
+      item.settling =
+        Math.abs(item.model.root.rotation.y - item.baseRotation) > 0.001;
+      if (!isActive && !item.settling)
+        item.model.root.rotation.y = item.baseRotation;
+      item.model.update?.(reduced.matches ? 0 : item.elapsed, dt, {
         preview: true,
-        active,
+        active: isActive,
+        reduced: reduced.matches,
       });
-      fitCamera(
-        item.camera,
-        item.bounds,
-        r.width / r.height,
-        item.model.angle ?? [4, 2.5, 5],
-        1.06,
-      );
-      renderer.setViewport(r.left, innerHeight - r.bottom, r.width, r.height);
-      renderer.setScissor(r.left, innerHeight - r.bottom, r.width, r.height);
+      const ratio = Math.min(devicePixelRatio || 1, 2);
+      const width = Math.ceil(item.width * ratio);
+      const height = Math.ceil(item.height * ratio);
+      if (source.width !== width || source.height !== height)
+        renderer.setSize(width, height, false);
+      if (item.canvas.width !== width || item.canvas.height !== height) {
+        item.canvas.width = width;
+        item.canvas.height = height;
+        fitCamera(
+          item.camera,
+          item.bounds,
+          width / height,
+          item.model.angle ?? [4, 2.5, 5],
+          1.06,
+        );
+      }
       renderer.render(item.scene, item.camera);
+      item.context.drawImage(source, 0, 0);
+      item.dirty = false;
+      item.element.classList.add('is-ready');
+    } catch (error) {
+      fail(item, error);
     }
-    request = requestAnimationFrame(frame);
+    if (items.some(needsFrame)) schedule();
   }
-  request = requestAnimationFrame(frame);
-  addEventListener('resize', () => renderer.setSize(innerWidth, innerHeight));
+  function fail(item, error) {
+    console.error(item.project.id, error);
+    item.failed = true;
+    item.model = null;
+    item.canvas.remove();
+    item.element.classList.add('is-ready');
+    item.element.insertAdjacentHTML(
+      'beforeend',
+      '<span class="preview-error">Open the experiment ↗</span>',
+    );
+  }
+  async function load(item) {
+    try {
+      const sceneModule = await import(
+        `./projects/${item.project.id}/scene.js`
+      );
+      const model = await sceneModule.create({ preview: true });
+      const { scene } = makeScene(item.project.background, environment.texture);
+      const bounds = setupModel(scene, model);
+      const camera = new T.PerspectiveCamera(35, 1, 0.01, 200);
+      await renderer.compileAsync(scene, camera);
+      Object.assign(item, {
+        model,
+        scene,
+        bounds,
+        camera,
+        baseRotation: model.root.rotation.y,
+      });
+      schedule();
+    } catch (error) {
+      fail(item, error);
+    } finally {
+      item.loading = false;
+      loading--;
+      loadNearby();
+    }
+  }
+  function loadNearby() {
+    if (document.hidden) return;
+    for (const item of items) {
+      if (loading >= 2) break;
+      if (!item.near || item.model || item.loading || item.failed) continue;
+      item.loading = true;
+      loading++;
+      void load(item);
+    }
+  }
+  const preload = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries)
+        byElement.get(entry.target).near = entry.isIntersecting;
+      loadNearby();
+    },
+    { rootMargin: '300px 0px' },
+  );
+  const visibility = new IntersectionObserver((entries) => {
+    for (const entry of entries)
+      byElement.get(entry.target).visible = entry.isIntersecting;
+    schedule();
+  });
+  const resize = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      const item = byElement.get(entry.target);
+      item.width = entry.contentRect.width;
+      item.height = entry.contentRect.height;
+      item.dirty = true;
+    }
+    schedule();
+  });
+  for (const item of items) {
+    preload.observe(item.element);
+    visibility.observe(item.element);
+    resize.observe(item.element);
+  }
+  reduced.addEventListener('change', () => {
+    for (const item of items) {
+      if (item.model) item.model.root.rotation.y = item.baseRotation;
+      item.settling = false;
+      item.dirty = true;
+    }
+    schedule();
+  });
   document.addEventListener('visibilitychange', () => {
     cancelAnimationFrame(request);
+    request = 0;
     if (!document.hidden) {
-      last = performance.now();
-      request = requestAnimationFrame(frame);
+      last = 0;
+      loadNearby();
+      schedule();
     }
   });
-  await loading;
+  document.body.classList.add('webgl-ready');
 }
