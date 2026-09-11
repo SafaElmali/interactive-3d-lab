@@ -93,7 +93,13 @@ export function cylinder(r, h, material, position, top = r) {
       );
     }
     points.push(new T.Vector2(0, h / 2));
-    return new T.LatheGeometry(points, 96);
+    const geometry = new T.LatheGeometry(points, 96);
+    const { position, uv } = geometry.attributes;
+    // Lathe defaults allocate UV space by profile-point index, crowding labels
+    // into the bevels. Map by physical height so artwork spans the whole wall.
+    for (let i = 0; i < position.count; i++)
+      uv.setY(i, (position.getY(i) + h / 2) / h);
+    return geometry;
   });
   return mesh(geometry, material, position);
 }

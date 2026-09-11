@@ -120,6 +120,24 @@ for (const project of projects) {
         `${project.id}: invalid surface geometry`,
       );
   }
+  if (project.id === 'can-do') {
+    const sleeves = objects.filter((node) => node.material.map);
+    assert.equal(sleeves.length, 3, 'The cover must show three labeled cans');
+    for (const { geometry } of sleeves) {
+      const { position, uv } = geometry.attributes;
+      geometry.computeBoundingBox();
+      const radius = geometry.boundingBox.max.x;
+      const labelV = [];
+      for (let i = 0; i < position.count; i++) {
+        if (Math.hypot(position.getX(i), position.getZ(i)) > radius * 0.999)
+          labelV.push(uv.getY(i));
+      }
+      assert.ok(
+        Math.max(...labelV) - Math.min(...labelV) > 0.9,
+        'The can wall must display the full label height, not stretch a thin strip',
+      );
+    }
+  }
   if (project.id === 'car-garage') {
     const materials = new Set(objects.map((n) => n.material));
     const tire = objects.find((n) => n.material.name === 'Tireside').material;
