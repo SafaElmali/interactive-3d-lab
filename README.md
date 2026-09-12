@@ -1,8 +1,10 @@
 # Object Lab
 
+[![Object Lab — floating Sprite, Fanta, and Pepsi cans, a mechanical keyboard, and a watch. Nine worlds. One scroll.](docs/images/object-lab-cover.png)](https://object-lab-3d.netlify.app/)
+
 Nine scroll-driven 3D stories, one homepage, and a separate folder for every experiment.
 
-**Gallery:** https://object-lab-safa.netlify.app
+**Gallery:** https://object-lab-3d.netlify.app
 
 **Repository:** https://github.com/SafaElmali/interactive-3d-lab
 
@@ -67,7 +69,7 @@ Each `scene.js` provides the shared 3D model for the gallery and the full experi
 
 ## Deploy to Netlify
 
-The Netlify project is `object-lab-safa`. Build settings are in `netlify.toml`; `dist/` contains only the public site. The current project uses manual deployments:
+The Netlify project is `object-lab-3d`. Build settings are in `netlify.toml`; `dist/` contains only the public site. The current project uses manual deployments:
 
 ```sh
 npm run check && npm run build
