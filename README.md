@@ -8,6 +8,12 @@ Nine scroll-driven 3D stories, one homepage, and a separate folder for every exp
 
 **Repository:** https://github.com/SafaElmali/interactive-3d-lab
 
+## In motion
+
+A 19-second film made with Remotion. 1080p, with music—sound on.
+
+https://github.com/user-attachments/assets/6a9d6dc7-f9e9-49a1-be1b-bd724a4503b0
+
 ## Run locally
 
 Requires Node.js 22 or newer. No dependency installation is necessary: the pinned Three.js library, fonts, models, and textures are included locally.
