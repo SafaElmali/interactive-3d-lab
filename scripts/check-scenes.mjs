@@ -34,6 +34,55 @@ T.TextureLoader.prototype.loadAsync = async (url) => {
   return texture;
 };
 const { box, cylinder, mat, keycap } = await import('../shared/geometry.js');
+const { instanceStaticChildren } = await import('../shared/instance-static.js');
+const repeated = new T.Group();
+repeated.position.set(2, -1, 3);
+repeated.rotation.y = 0.8;
+const sharedMaterial = mat('#abc');
+const originals = Array.from({ length: 6 }, (_, i) => {
+  const object = box(0.2, 0.3, 0.1, sharedMaterial, [i * 0.3, i % 2, 0]);
+  object.rotation.z = i * 0.15;
+  repeated.add(object);
+  return object;
+});
+const beforeBounds = new T.Box3().setFromObject(repeated);
+instanceStaticChildren(repeated);
+assert.equal(
+  repeated.children.length,
+  1,
+  'Repeated static meshes should share a draw',
+);
+const batch = repeated.children[0];
+assert.equal(
+  batch.count,
+  originals.length,
+  'Every original object must remain',
+);
+assert.equal(
+  batch.geometry,
+  originals[0].geometry,
+  'Instancing must preserve geometry',
+);
+assert.equal(
+  batch.material,
+  sharedMaterial,
+  'Day/night material updates must stay shared',
+);
+assert.equal(batch.castShadow, true);
+assert.equal(batch.receiveShadow, true);
+const matrix = new T.Matrix4();
+originals.forEach((original, index) => {
+  batch.getMatrixAt(index, matrix);
+  matrix.elements.forEach((value, i) => {
+    assert.ok(
+      Math.abs(value - original.matrix.elements[i]) < 0.000001,
+      'Instances must retain their original position, rotation and scale',
+    );
+  });
+});
+const afterBounds = new T.Box3().setFromObject(repeated);
+assert.ok(beforeBounds.min.distanceTo(afterBounds.min) < 0.000001);
+assert.ok(beforeBounds.max.distanceTo(afterBounds.max) < 0.000001);
 for (const object of [
   box(2, 0.25, 1, mat('#fff')),
   keycap(2, 0.25, 1, mat('#fff')),

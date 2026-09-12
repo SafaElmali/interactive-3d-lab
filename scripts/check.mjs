@@ -61,9 +61,16 @@ for (const slug of ['sneaker-studio', 'car-garage']) {
 console.log(
   `${checked} authored scripts parsed. Nine route folders and local references verified.`,
 );
-const test = spawnSync(
-  process.execPath,
-  [path.join(root, 'scripts/check-scenes.mjs')],
-  { stdio: 'inherit' },
-);
-process.exitCode = test.status ?? 1;
+for (const script of ['check-render-loop.mjs', 'check-scenes.mjs']) {
+  const test = spawnSync(
+    process.execPath,
+    [path.join(root, 'scripts', script)],
+    {
+      stdio: 'inherit',
+    },
+  );
+  if (test.status !== 0) {
+    process.exitCode = test.status ?? 1;
+    break;
+  }
+}

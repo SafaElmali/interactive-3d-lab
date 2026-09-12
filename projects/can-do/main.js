@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from '../../vendor/GLTFLoader.js';
 import { clamp, lerp, smoothstep, selectedIndex, canPose } from './motion.js';
+import { createRenderLoop } from '../../shared/render-loop.js';
 
 const brands = [
   {
@@ -63,9 +64,6 @@ const currentLabel = document.querySelector('[data-carousel-current]');
 const depthLines = [...document.querySelectorAll('[data-depth]')];
 const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
 let reducedMotion = motionPreference.matches;
-motionPreference.addEventListener('change', (event) => {
-  reducedMotion = event.matches;
-});
 
 function showError(error) {
   console.error('The can scene could not load:', error);
@@ -203,13 +201,22 @@ async function initialize() {
   const hover = new THREE.Vector2();
   const raycaster = new THREE.Raycaster();
   const labelPoint = new THREE.Vector3();
-  let requestId = 0;
-  let lastFrame = performance.now();
   let elapsed = 0;
+  let contextLost = false;
+  reducedMotion = motionPreference.matches;
+  const loop = createRenderLoop(frame, {
+    reduced: () => reducedMotion,
+    visible: () => !document.hidden && !contextLost,
+  });
+  motionPreference.addEventListener('change', (event) => {
+    reducedMotion = event.matches;
+    loop.invalidate();
+  });
 
   function measureScroll() {
     const distance = document.documentElement.scrollHeight - innerHeight;
     targetProgress = distance > 0 ? clamp(scrollY / distance) : 0;
+    loop.invalidate();
   }
 
   function updateSelection() {
@@ -225,6 +232,7 @@ async function initialize() {
   function setOffset(value) {
     targetOffset = clamp(value, -3, 3);
     updateSelection();
+    loop.invalidate();
   }
 
   function step(direction) {
@@ -252,6 +260,7 @@ async function initialize() {
       (event.clientX / innerWidth) * 2 - 1,
       -(event.clientY / innerHeight) * 2 + 1,
     );
+    if (!reducedMotion && progress > 0.2 && progress < 0.82) loop.invalidate();
     if (!dragging) return;
     const dx = event.clientX - dragStart.x;
     const dy = event.clientY - dragStart.y;
@@ -261,6 +270,7 @@ async function initialize() {
   });
 
   function endDrag() {
+    if (!dragging) return;
     dragging = false;
     document.body.classList.remove('is-dragging');
     setOffset(Math.round(targetOffset));
@@ -270,6 +280,7 @@ async function initialize() {
   addEventListener('blur', endDrag);
   document.documentElement.addEventListener('pointerleave', () => {
     pointer.set(2, 2);
+    if (hover.lengthSq() > 0.000001) loop.invalidate();
   });
 
   addEventListener(
@@ -338,18 +349,20 @@ async function initialize() {
     });
   }
 
-  function frame(now) {
-    const dt = Math.min((now - lastFrame) / 1000, 0.05);
-    lastFrame = now;
+  function frame(dt) {
     if (!reducedMotion) elapsed += dt;
     const blend = (amount) =>
       reducedMotion ? 1 : 1 - (1 - amount) ** (dt * 60);
     progress = lerp(progress, targetProgress, blend(0.075));
+    if (Math.abs(progress - targetProgress) < 0.00001)
+      progress = targetProgress;
     velocity = reducedMotion
       ? 0
       : lerp(velocity, (progress - previousProgress) * 10000, blend(0.12));
     previousProgress = progress;
     offset = lerp(offset, targetOffset, blend(0.12));
+    if (Math.abs(offset - targetOffset) < 0.0001) offset = targetOffset;
+    if (progress === targetProgress && Math.abs(velocity) < 0.01) velocity = 0;
     updatePage();
     cans.forEach((can, index) => {
       const pose = canPose({
@@ -446,32 +459,40 @@ async function initialize() {
     );
     spotlight.intensity = lerp(lerp(255, 340, focusWeight), 195, labelWeight);
     renderer.render(scene, camera);
-    requestId = requestAnimationFrame(frame);
+    // Reveal only after both the model and every label have been drawn.
+    boot.classList.add('is-ready');
+    return (
+      progress !== targetProgress ||
+      offset !== targetOffset ||
+      velocity !== 0 ||
+      hover.distanceToSquared(hoverTarget) > 0.000001
+    );
   }
 
   document.addEventListener('visibilitychange', () => {
-    cancelAnimationFrame(requestId);
-    if (!document.hidden) {
-      lastFrame = performance.now();
-      requestId = requestAnimationFrame(frame);
-    }
+    if (document.hidden) loop.stop();
+    else loop.invalidate();
+  });
+  addEventListener('pagehide', (event) => {
+    loop.stop();
+    if (!event.persisted) loop.dispose();
+  });
+  addEventListener('pageshow', (event) => {
+    if (event.persisted) resize();
   });
   canvas.addEventListener('webglcontextlost', (event) => {
     event.preventDefault();
-    cancelAnimationFrame(requestId);
+    contextLost = true;
+    loop.stop();
     showError(new Error('The graphics context was interrupted.'));
   });
   canvas.addEventListener('webglcontextrestored', () => {
+    contextLost = false;
     boot.classList.remove('has-error');
     boot.querySelector('.boot__error').hidden = true;
     boot.classList.add('is-ready');
-    lastFrame = performance.now();
-    requestId = requestAnimationFrame(frame);
+    loop.invalidate();
   });
-
-  // Reveal only after both the model and every label have loaded.
-  frame(performance.now());
-  boot.classList.add('is-ready');
 }
 
 function createCan(source, texture, brand) {

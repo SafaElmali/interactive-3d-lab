@@ -3,6 +3,7 @@ import { projects } from './projects.js';
 import { makeRenderer, makeScene } from './stage.js';
 import { clamp, smooth, colorAt } from './choreography.js';
 import { disposeObject } from './geometry.js';
+import { createRenderLoop } from './render-loop.js';
 
 const project = projects.find((p) => p.id === document.body.dataset.project);
 const next = projects[(projects.indexOf(project) + 1) % projects.length];
@@ -97,9 +98,22 @@ async function start(story, createStory) {
     maxScroll = 1,
     progress = 0,
     time = 0;
-  let last = performance.now(),
-    request,
-    lastAct = -1;
+  let lastAct = -1;
+  let contextLost = false;
+  const loop = createRenderLoop(frame, {
+    reduced: () => reduced.matches,
+    visible: () => !document.hidden && !contextLost,
+  });
+  const loading = document.querySelector('.story-loading');
+  renderer.domElement.addEventListener('webglcontextlost', (event) => {
+    event.preventDefault();
+    contextLost = true;
+    loop.stop();
+  });
+  renderer.domElement.addEventListener('webglcontextrestored', () => {
+    contextLost = false;
+    loop.invalidate();
+  });
   function resize() {
     mobile = innerWidth < 760;
     renderer.setSize(innerWidth, innerHeight);
@@ -111,17 +125,19 @@ async function start(story, createStory) {
       1,
       document.documentElement.scrollHeight - innerHeight,
     );
+    loop.invalidate();
   }
   resize();
   progress = clamp(scrollY / maxScroll);
   addEventListener('resize', resize);
-  function frame(now) {
-    const dt = Math.min((now - last) / 1000, 0.05);
-    last = now;
+  addEventListener('scroll', loop.invalidate, { passive: true });
+  reduced.addEventListener('change', loop.invalidate);
+  function frame(dt) {
     const target = clamp(scrollY / maxScroll);
     progress = reduced.matches
       ? target
       : T.MathUtils.damp(progress, target, 9, dt);
+    if (Math.abs(progress - target) < 0.00001) progress = target;
     if (!reduced.matches) time += dt;
     // Reduced motion uses static chapter compositions without spins or parallax.
     const sceneProgress = reduced.matches
@@ -165,30 +181,23 @@ async function start(story, createStory) {
     });
     progressBar.style.transform = `scaleX(${progress})`;
     renderer.render(scene, camera);
-    request = requestAnimationFrame(frame);
+    if (loading.isConnected) loading.remove();
+    return progress !== target;
   }
-  frame(performance.now());
-  document.querySelector('.story-loading').remove();
   document.addEventListener('visibilitychange', () => {
-    cancelAnimationFrame(request);
-    if (!document.hidden) {
-      last = performance.now();
-      request = requestAnimationFrame(frame);
-    }
+    if (document.hidden) loop.stop();
+    else loop.invalidate();
   });
   addEventListener('pagehide', (event) => {
-    cancelAnimationFrame(request);
+    loop.stop();
     if (event.persisted) return;
+    loop.dispose();
     model.dispose?.();
     disposeObject(scene);
     renderer.dispose();
     environment.dispose();
   });
   addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-      last = performance.now();
-      cancelAnimationFrame(request);
-      request = requestAnimationFrame(frame);
-    }
+    if (event.persisted) resize();
   });
 }

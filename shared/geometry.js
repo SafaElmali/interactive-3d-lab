@@ -272,6 +272,7 @@ export function disposeObject(root) {
     materials = new Set(),
     textures = new Set();
   root.traverse((n) => {
+    if (n.isInstancedMesh) n.dispose();
     if (n.geometry) geometries.add(n.geometry);
     if (n.material)
       (Array.isArray(n.material) ? n.material : [n.material]).forEach((m) =>

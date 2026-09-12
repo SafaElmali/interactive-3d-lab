@@ -8,6 +8,7 @@ import {
   label,
 } from '../../shared/geometry.js';
 import { surface, microfinish } from '../../shared/materials.js';
+import { instanceStaticChildren } from '../../shared/instance-static.js';
 export async function create({ preview = false, scene, lights } = {}) {
   const root = new T.Group();
   const lawn = mat('#87a37c', 0.9),
@@ -203,6 +204,7 @@ export async function create({ preview = false, scene, lights } = {}) {
       },
     );
     b.add(sign);
+    instanceStaticChildren(b);
     buildings.push(b);
     root.add(b);
   });
