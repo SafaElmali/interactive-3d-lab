@@ -12,7 +12,7 @@ projects.forEach((p) => {
   link.className = 'project-card';
   link.href = `./projects/${p.id}/`;
   link.style.setProperty('--card-bg', p.background);
-  link.innerHTML = `<div class="preview" data-project="${p.id}"><span class="index">${p.number}</span><span class="open-icon" aria-hidden="true">↗</span></div><div class="card-meta"><div><h2>${p.title}</h2><span class="category">${p.category}</span></div><p>${p.description}</p></div>`;
+  link.innerHTML = `<div class="preview" data-project="${p.id}" aria-busy="true"><span class="preview-loader" role="status"><span>Loading ${p.title} preview</span></span><span class="index">${p.number}</span><span class="open-icon" aria-hidden="true">↗</span></div><div class="card-meta"><div><h2>${p.title}</h2><span class="category">${p.category}</span></div><p>${p.description}</p></div>`;
   gallery.append(link);
 });
 try {
@@ -21,11 +21,17 @@ try {
   console.error(error);
   document.body.classList.add('webgl-ready');
   document.querySelectorAll('.preview').forEach((p) => {
+    finishPreview(p);
     p.insertAdjacentHTML(
       'beforeend',
       '<span class="preview-error">Open the experiment ↗</span>',
     );
   });
+}
+function finishPreview(element) {
+  element.classList.add('is-ready');
+  element.removeAttribute('aria-busy');
+  element.querySelector('.preview-loader')?.remove();
 }
 async function startGallery() {
   // One offscreen WebGL renderer feeds canvases inside the cards. The browser
@@ -150,7 +156,8 @@ async function startGallery() {
       renderer.render(item.scene, item.camera);
       item.context.drawImage(source, 0, 0);
       item.dirty = false;
-      item.element.classList.add('is-ready');
+      if (!item.element.classList.contains('is-ready'))
+        finishPreview(item.element);
     } catch (error) {
       fail(item, error);
     }
@@ -161,7 +168,7 @@ async function startGallery() {
     item.failed = true;
     item.model = null;
     item.canvas.remove();
-    item.element.classList.add('is-ready');
+    finishPreview(item.element);
     item.element.insertAdjacentHTML(
       'beforeend',
       '<span class="preview-error">Open the experiment ↗</span>',
@@ -212,8 +219,10 @@ async function startGallery() {
     { rootMargin: '300px 0px' },
   );
   const visibility = new IntersectionObserver((entries) => {
-    for (const entry of entries)
+    for (const entry of entries) {
       byElement.get(entry.target).visible = entry.isIntersecting;
+      entry.target.classList.toggle('is-visible', entry.isIntersecting);
+    }
     schedule();
   });
   const resize = new ResizeObserver((entries) => {

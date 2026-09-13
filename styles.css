@@ -251,15 +251,36 @@ noscript {
   display: block;
   padding: 32px;
 }
-.preview:not(.is-ready):after {
-  content: 'Loading object…';
+.preview-loader {
   position: absolute;
-  left: 20px;
-  bottom: 24px;
-  font:
-    12px Mono,
-    monospace;
-  color: #626a62;
+  top: 50%;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  margin: -14px;
+  border: 2px solid #242b2726;
+  border-top-color: #242b27;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: preview-spin 0.9s linear infinite paused;
+}
+body:not(.webgl-ready) .preview-loader,
+.preview.is-visible .preview-loader {
+  animation-play-state: running;
+}
+.preview-loader > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@keyframes preview-spin {
+  to {
+    transform: rotate(1turn);
+  }
 }
 @media (min-width: 1800px) {
   main,
@@ -321,6 +342,9 @@ noscript {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .preview-loader {
+    animation: none;
+  }
   * {
     scroll-behavior: auto !important;
     transition: none !important;
