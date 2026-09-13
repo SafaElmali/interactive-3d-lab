@@ -1,4 +1,4 @@
-@import "../styles.css";
+@import '../styles.css';
 html {
   min-height: 100%;
   background: #101214;
@@ -154,9 +154,11 @@ body.scroll-story {
     14px Mono,
     monospace;
   pointer-events: auto;
+  min-height: 44px;
 }
-.next-story span {
-  font: 24px Arial;
+.next-story .arrow-icon {
+  width: 24px;
+  height: 24px;
 }
 .story-footer {
   position: fixed;
@@ -173,10 +175,10 @@ body.scroll-story {
 }
 .scroll-cue {
   min-width: 190px;
-}
-.scroll-cue span {
-  display: inline-block;
-  margin-left: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 .story-progress {
   flex: 1;
@@ -359,7 +361,7 @@ body.scroll-story {
     display: inline;
   }
   .chapter-heading span + span::before {
-    content: " ";
+    content: ' ';
   }
   .chapter-copy,
   .layout-right .chapter-copy,

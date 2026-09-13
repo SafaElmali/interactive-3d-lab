@@ -8,6 +8,9 @@ import { createRenderLoop } from './render-loop.js';
 const project = projects.find((p) => p.id === document.body.dataset.project);
 const next = projects[(projects.indexOf(project) + 1) % projects.length];
 const creditsUrl = new URL('../credits.html', import.meta.url).href;
+const iconsUrl = new URL('./icons.svg', import.meta.url).href;
+const arrow = (direction) =>
+  `<svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="${iconsUrl}#arrow-${direction}" /></svg>`;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let renderer, environment;
 try {
@@ -19,7 +22,7 @@ try {
   document.body.style.background = story.colors[0];
   document.body.innerHTML = `
     <div class="story-backdrop" aria-hidden="true"></div>
-    <header class="story-header"><a href="../../">← All objects</a><span>${project.title}</span><a href="../../">OBJECT/LAB <small>${project.number}</small></a></header>
+    <header class="story-header"><a class="icon-link" href="../../">${arrow('left')}All objects</a><span>${project.title}</span><a href="../../">OBJECT/LAB <small>${project.number}</small></a></header>
     <canvas class="story-canvas" aria-hidden="true"></canvas>
     <main class="story-track" aria-label="${project.title}: a story in four acts">
       ${story.chapters
@@ -29,12 +32,12 @@ try {
             i,
           ) => `<section class="story-chapter layout-${chapter.layout || (i === 0 ? 'hero' : i === 3 ? 'finale' : 'left')}" id="act-${i + 1}">
         <div class="chapter-art"><${i === 0 ? 'h1' : 'h2'} class="chapter-heading">${chapter.title}</${i === 0 ? 'h1' : 'h2'}></div>
-        <div class="chapter-copy"><span class="chapter-label">0${i + 1} / ${chapter.label}</span><p>${chapter.text}</p>${i === 3 ? `<a class="next-story" href="../${next.id}/">Next: ${next.title} <span aria-hidden="true">↗</span></a>` : ''}</div>
+        <div class="chapter-copy"><span class="chapter-label">0${i + 1} / ${chapter.label}</span><p>${chapter.text}</p>${i === 3 ? `<a class="next-story" href="../${next.id}/">Next: ${next.title} ${arrow('up-right')}</a>` : ''}</div>
       </section>`,
         )
         .join('')}
     </main>
-    <div class="story-footer"><span class="scroll-cue">Scroll to unfold <span aria-hidden="true">↓</span></span><div class="story-progress" aria-hidden="true"><span></span></div><span class="act-counter">01 — 04</span><a href="${creditsUrl}" class="story-credits">Credits</a></div>
+    <div class="story-footer"><span class="scroll-cue">Scroll to unfold ${arrow('down')}</span><div class="story-progress" aria-hidden="true"><span></span></div><span class="act-counter">01 — 04</span><a href="${creditsUrl}" class="story-credits">Credits</a></div>
     <div class="story-loading" role="status"><span>${project.title}</span><p>Setting the scene…</p></div>`;
   await start(story, createStory);
 } catch (error) {

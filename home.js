@@ -7,12 +7,14 @@ import {
   fitCamera,
 } from './shared/stage.js';
 const gallery = document.querySelector('#gallery');
+const openArrow =
+  '<svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="./shared/icons.svg#arrow-up-right" /></svg>';
 projects.forEach((p) => {
   const link = document.createElement('a');
   link.className = 'project-card';
   link.href = `./projects/${p.id}/`;
   link.style.setProperty('--card-bg', p.background);
-  link.innerHTML = `<div class="preview" data-project="${p.id}" aria-busy="true"><span class="preview-loader" role="status"><span>Loading ${p.title} preview</span></span><span class="index">${p.number}</span><span class="open-icon" aria-hidden="true">↗</span></div><div class="card-meta"><div><h2>${p.title}</h2><span class="category">${p.category}</span></div><p>${p.description}</p></div>`;
+  link.innerHTML = `<div class="preview" data-project="${p.id}" aria-busy="true"><span class="preview-loader" role="status"><span>Loading ${p.title} preview</span></span><span class="index">${p.number}</span><span class="open-icon" aria-hidden="true">${openArrow}</span></div><div class="card-meta"><div><h2>${p.title}</h2><span class="category">${p.category}</span></div><p>${p.description}</p></div>`;
   gallery.append(link);
 });
 try {
@@ -24,7 +26,7 @@ try {
     finishPreview(p);
     p.insertAdjacentHTML(
       'beforeend',
-      '<span class="preview-error">Open the experiment ↗</span>',
+      '<span class="preview-error">Open the experiment</span>',
     );
   });
 }
@@ -171,7 +173,7 @@ async function startGallery() {
     finishPreview(item.element);
     item.element.insertAdjacentHTML(
       'beforeend',
-      '<span class="preview-error">Open the experiment ↗</span>',
+      '<span class="preview-error">Open the experiment</span>',
     );
   }
   async function load(item) {

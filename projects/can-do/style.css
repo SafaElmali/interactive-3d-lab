@@ -1,3 +1,5 @@
+@import url('../../shared/icons.css');
+
 @font-face {
   font-family: 'Barlow Condensed';
   font-style: italic;
@@ -255,7 +257,8 @@ main {
   width: 3.25rem;
   height: 3.25rem;
   padding: 0;
-  place-content: center;
+  place-items: center;
+  appearance: none;
   border: 1px solid rgba(255, 255, 255, 0.58);
   border-radius: 50%;
   pointer-events: auto;
@@ -264,15 +267,15 @@ main {
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   cursor: pointer;
-  font-family:
-    DM Mono,
-    monospace;
-  font-size: 1rem;
   transform: translateY(-50%);
   transition:
     color 0.18s ease,
     background-color 0.18s ease,
     transform 0.18s ease;
+}
+.carousel-control .arrow-icon {
+  width: 24px;
+  height: 24px;
 }
 .carousel-control--previous {
   left: 1.5rem;
@@ -280,12 +283,19 @@ main {
 .carousel-control--next {
   right: 1.5rem;
 }
-.carousel-control:hover,
 .carousel-control:focus-visible {
   color: #071008;
   background: var(--acid);
-  outline: none;
+  outline: 2px solid var(--acid);
+  outline-offset: 3px;
   transform: translateY(-50%) scale(1.08);
+}
+@media (hover: hover) and (pointer: fine) {
+  .carousel-control:hover {
+    color: #071008;
+    background: var(--acid);
+    transform: translateY(-50%) scale(1.08);
+  }
 }
 .carousel-control:active {
   transform: translateY(-50%) scale(0.94);
@@ -512,14 +522,14 @@ noscript {
   }
   .carousel-control {
     top: 56%;
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 3rem;
+    height: 3rem;
   }
   .carousel-control--previous {
-    left: 0.6rem;
+    left: max(0.75rem, env(safe-area-inset-left));
   }
   .carousel-control--next {
-    right: 0.6rem;
+    right: max(0.75rem, env(safe-area-inset-right));
   }
   .carousel-hint {
     bottom: 4vh;
@@ -591,4 +601,17 @@ noscript {
   }
 }
 
-.lab-home {position:fixed;right:28px;top:24px;z-index:20;font:12px "DM Mono",monospace;color:#f1eee5;text-decoration:none}.lab-home:hover{color:#b9ff2f}
+.lab-home {
+  position: fixed;
+  right: 28px;
+  top: 8px;
+  z-index: 20;
+  font:
+    12px 'DM Mono',
+    monospace;
+  color: #f1eee5;
+  text-decoration: none;
+}
+.lab-home:hover {
+  color: #b9ff2f;
+}
