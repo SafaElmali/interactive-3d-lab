@@ -1,8 +1,10 @@
 # Object Lab
 
-[![Object Lab — floating Sprite, Fanta, and Pepsi cans, a mechanical keyboard, and a watch. Nine worlds. One scroll.](docs/images/object-lab-cover.png)](https://object-lab-3d.netlify.app/)
+[![Object Lab — floating Sprite, Fanta, and Pepsi cans, a mechanical keyboard, and a watch. Fifteen worlds. One scroll.](docs/images/object-lab-cover-15-worlds.png)](https://object-lab-3d.netlify.app/)
 
 Fifteen scroll-driven 3D stories, one homepage, and a separate folder for every experiment.
+
+The latest additions: Light / Leak, Glass Garden, Lift Off, Insert Coin, Paper Trails, and Deep Blue.
 
 **Gallery:** https://object-lab-3d.netlify.app
 
@@ -10,7 +12,7 @@ Fifteen scroll-driven 3D stories, one homepage, and a separate folder for every 
 
 ## In motion
 
-A 19-second film of the original nine-world collection, made with Remotion. 1080p, with music—sound on.
+A 19-second film of the original collection, made with Remotion. 1080p, with music—sound on. This earlier film predates the six latest additions.
 
 https://github.com/user-attachments/assets/6a9d6dc7-f9e9-49a1-be1b-bd724a4503b0
 
@@ -29,7 +31,7 @@ npm run check  # Syntax, links, GLB integrity, geometry, scroll poses, and rever
 npm run build  # Copies the deployable site into dist/
 ```
 
-## Projects
+## The 15 worlds
 
 | Folder                         | Experience    | Scroll sequence                                                        |
 | ------------------------------ | ------------- | ---------------------------------------------------------------------- |

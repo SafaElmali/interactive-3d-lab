@@ -1,10 +1,11 @@
 # Object Lab cover
 
-Created with the built-in ImageGen tool. The final image preserves the first cover composition and replaces the can labels using the Sprite, Fanta, and Pepsi textures in `projects/can-do/assets/brands/`.
+Created and edited with the built-in ImageGen tool. The original cover uses the Sprite, Fanta, and Pepsi textures in `projects/can-do/assets/brands/` as label references. The current README cover, `object-lab-cover-15-worlds.png`, updates the tagline to match the expanded collection. The original image is retained as `object-lab-cover.png`.
 
 ## Final edit prompt
 
-Edit only the beverage can labels in image 1, the ORIGINAL detailed OBJECT/LAB cover with three cans, a keyboard, and a watch.
-Image roles: image 1 is the exact cover to edit; image 2 is the Sprite label reference; image 3 is the Fanta label reference; image 4 is the Pepsi label reference.
-Replace the abstract fake symbols on the three cans with the matching real label artwork from the supplied project assets. Left green can: clearly readable "Sprite" white italic wordmark with the yellow lemon accent from image 2. Rear orange can: clearly readable "FANTA" white/navy wordmark and green leaf from image 3. Front blue can: correct red-white-blue Pepsi globe with black "PEPSI" wordmark from image 4. The label graphics should wrap naturally around the cylindrical surfaces and follow each can's existing tilt, with the main logos centered on the visible faces, legible rather than stretched or repeated. Keep the detailed metallic rims, condensation, lighting, reflections and shadows.
-Preserve everything else in image 1: the EXACT first layout, three can positions and sizes, ivory background, huge charcoal OBJECT/LAB heading with its orange slash, white/lavender keyboard and floating keycaps, green-strap silver watch, lifted bezel, and the exact bottom tagline "Nine worlds. One scroll." Preserve the 2:1 landscape crop. Do not simplify the cover. Do not change typography, add objects, or move the keyboard or watch. Only replace the three can label graphics.
+Use case: text-localization.
+Asset type: GitHub README cover image.
+Input image 1 is the edit target, an existing Object Lab cover.
+Replace ONLY the bottom tagline "Nine worlds. One scroll." with the exact text "Fifteen worlds. One scroll." Keep it centered along the bottom in the same dark charcoal font style, size, tracking, and baseline. The spelling must be exactly Fifteen worlds. One scroll.
+Preserve every other element as closely as possible: the 2:1 landscape composition and crop, huge OBJECT/LAB title and orange slash, ivory background, three detailed Sprite/Fanta/Pepsi cans and their exact logos, condensation, floating white/lavender mechanical keyboard and keycaps, green-strap silver watch and lifted bezel, lighting, reflections and shadows. Do not add or remove any objects. This is only a correction of the collection count in the bottom text.
