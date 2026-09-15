@@ -2,7 +2,7 @@
 
 [![Object Lab — floating Sprite, Fanta, and Pepsi cans, a mechanical keyboard, and a watch. Nine worlds. One scroll.](docs/images/object-lab-cover.png)](https://object-lab-3d.netlify.app/)
 
-Nine scroll-driven 3D stories, one homepage, and a separate folder for every experiment.
+Fifteen scroll-driven 3D stories, one homepage, and a separate folder for every experiment.
 
 **Gallery:** https://object-lab-3d.netlify.app
 
@@ -10,7 +10,7 @@ Nine scroll-driven 3D stories, one homepage, and a separate folder for every exp
 
 ## In motion
 
-A 19-second film made with Remotion. 1080p, with music—sound on.
+A 19-second film of the original nine-world collection, made with Remotion. 1080p, with music—sound on.
 
 https://github.com/user-attachments/assets/6a9d6dc7-f9e9-49a1-be1b-bd724a4503b0
 
@@ -42,6 +42,12 @@ npm run build  # Copies the deployable site into dist/
 | `projects/miniature-city/`     | Small Hours   | Floating buildings, golden hour, illuminated night, flyover            |
 | `projects/car-garage/`         | After Hours   | Night portrait, paint and angle changes, moving light gates, final lap |
 | `projects/coffee-journey/`     | Daily Ritual  | Bean cloud, grinder, pouring coffee, steaming cup                      |
+| `projects/film-camera/`        | Light / Leak  | Camera portrait, separated lens elements, opening shutter, unfurling film |
+| `projects/glass-garden/`       | Glass Garden  | Empty vessel, settling soil, unfurling plants, fireflies at dusk       |
+| `projects/lift-off/`           | Lift Off      | Launchpad, ignition, stage separation, satellite unfolding above Earth |
+| `projects/insert-coin/`        | Insert Coin   | Assembling cabinet, screen boot, emerging game world, neon finale      |
+| `projects/paper-trails/`       | Paper Trails  | Flat sheet, forming folds, paper crane, flock taking flight            |
+| `projects/deep-blue/`          | Deep Blue     | Translucent jellyfish, pulsing tentacles, drifting bloom, glowing depths |
 
 ## Surface quality
 
@@ -61,7 +67,7 @@ scripts/                           Development server, checks, static build
 .openai/hosting.json                Private Sites hosting configuration
 ```
 
-Each `scene.js` provides the shared 3D model for the gallery and the full experience. Each of the eight new `story.js` files owns its art direction, four chapter texts, palette, and scroll choreography. `shared/story.js` handles rendering, native document scrolling, text transitions, loading, and navigation. `shared/choreography.js` contains deterministic interpolation helpers. CAN/DO retains its original independent implementation.
+Each `scene.js` provides the shared 3D model for the gallery and the full experience. Each of the fourteen `story.js` files owns its art direction, four chapter texts, palette, and scroll choreography. New worlds may also have a local `style.css` for their typography and atmosphere. `shared/story.js` handles rendering, native document scrolling, text transitions, loading, and navigation. `shared/choreography.js` contains deterministic interpolation helpers. CAN/DO retains its original independent implementation.
 
 ## Motion and accessibility
 
@@ -71,7 +77,8 @@ Each `scene.js` provides the shared 3D model for the gallery and the full experi
 - Rendering pauses in hidden tabs and resumes after browser history restoration.
 - Each final chapter links to the next project; the collection and source credits remain available throughout.
 - Models, textures, and fonts are local. No third-party asset requests or autoplay audio are needed.
-- The automated checks use real geometry with image-loading stubs. They verify 122 forward scroll poses per story across desktop and mobile camera proportions, reverse-scroll determinism, reduced-motion chapter states, and local routes. They do not render pixels or test GPU shaders. Browser visual QA has not been performed.
+- The automated checks use real geometry with image-loading stubs. They verify 122 forward scroll poses per story across desktop and mobile camera proportions, reverse-scroll determinism for transforms, materials and surface geometry, reduced-motion chapter states, and local routes. They do not render pixels or test GPU shaders.
+- The six additions (Light / Leak through Deep Blue) have also been visually reviewed in a browser at desktop and 390×844 mobile sizes, including all four desktop acts. Their browser console checks were clean. This is a visual review, not a cross-browser or physical-device performance benchmark.
 
 ## Deploy to Netlify
 

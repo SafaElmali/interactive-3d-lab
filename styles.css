@@ -144,6 +144,7 @@ h1 em {
   width: 100%;
   aspect-ratio: 1.26;
   background: var(--card-bg);
+  color: var(--card-ink, #252b29);
   border-radius: 3px;
   overflow: hidden;
   position: relative;
@@ -156,7 +157,8 @@ h1 em {
   font:
     12px Mono,
     monospace;
-  color: #70776b;
+  color: inherit;
+  opacity: 0.8;
   z-index: 2;
 }
 .open-icon {
@@ -238,7 +240,7 @@ h1 em {
   left: 20px;
   bottom: 24px;
   font-size: 12px;
-  color: #5a635a;
+  color: inherit;
   max-width: 70%;
   z-index: 2;
 }
@@ -269,8 +271,8 @@ noscript {
   width: 28px;
   height: 28px;
   margin: -14px;
-  border: 2px solid #242b2726;
-  border-top-color: #242b27;
+  border: 2px solid color-mix(in srgb, currentColor 15%, transparent);
+  border-top-color: currentColor;
   border-radius: 50%;
   pointer-events: none;
   animation: preview-spin 0.9s linear infinite paused;

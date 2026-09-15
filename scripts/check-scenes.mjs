@@ -130,7 +130,13 @@ for (const asset of materialSources.assets) {
     );
   }
 }
-const { projects } = await import('../shared/projects.js');
+const { projects: collection } = await import('../shared/projects.js');
+const requested = process.argv.slice(2);
+for (const id of requested)
+  assert.ok(collection.some((project) => project.id === id), `Unknown world: ${id}`);
+const projects = requested.length
+  ? collection.filter((project) => requested.includes(project.id))
+  : collection;
 for (const project of projects) {
   const { create } = await import(`../projects/${project.id}/scene.js`);
   const model = await create({ preview: true });
@@ -255,6 +261,7 @@ for (const project of projects.filter((p) => p.id !== 'can-do')) {
   );
   assert.equal(story.chapters.length, 4);
   assert.equal(story.colors.length, 4);
+  assert.equal(story.inks.length, 4);
   const scene = new T.Scene();
   scene.add(new T.HemisphereLight());
   const lights = {
@@ -296,6 +303,13 @@ for (const project of projects.filter((p) => p.id !== 'can-do')) {
           assert.ok(
             node.geometry.attributes.position.array.every(Number.isFinite),
           );
+        // Folding paper and swimming surfaces may rewrite their vertices.
+        const position = node.geometry?.attributes.position;
+        if (position?.version > 0)
+          assert.ok(
+            position.array.every(Number.isFinite),
+            `${project.id}: invalid animated geometry at ${p}`,
+          );
         if (node.isInstancedMesh)
           assert.ok(node.instanceMatrix.array.every(Number.isFinite));
       });
@@ -316,10 +330,38 @@ for (const project of projects.filter((p) => p.id !== 'can-do')) {
   const snapshot = () => {
     scene.updateMatrixWorld(true);
     const state = [];
-    model.root.traverse((node) =>
-      state.push([node.visible, ...node.matrixWorld.elements]),
-    );
-    return state;
+    const surfaceHash = createHash('sha256');
+    const geometries = new Set();
+    model.root.traverse((node) => {
+      state.push([node.visible, ...node.matrixWorld.elements]);
+      if (node.geometry && !geometries.has(node.geometry)) {
+        geometries.add(node.geometry);
+        for (const attribute of Object.values(node.geometry.attributes)) {
+          const array = attribute.array ?? attribute.data.array;
+          surfaceHash.update(
+            Buffer.from(array.buffer, array.byteOffset, array.byteLength),
+          );
+        }
+      }
+      if (node.isInstancedMesh) {
+        const array = node.instanceMatrix.array;
+        surfaceHash.update(
+          Buffer.from(array.buffer, array.byteOffset, array.byteLength),
+        );
+      }
+      for (const material of node.material
+        ? Array.isArray(node.material) ? node.material : [node.material]
+        : []) {
+        state.push([
+          material.visible,
+          material.opacity,
+          material.color?.getHex(),
+          material.emissive?.getHex(),
+          material.emissiveIntensity,
+        ]);
+      }
+    });
+    return { state, surfaces: surfaceHash.digest('hex') };
   };
   const context = { mobile: false, reduced: false, dt: 1 / 60 };
   model.update(0.35, 4, context);

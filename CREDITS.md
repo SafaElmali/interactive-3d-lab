@@ -2,7 +2,7 @@
 
 ## Original work
 
-The gallery, common viewer, and procedural keyboard, perfume bottle, turntable, watch, miniature city, and coffee scenes were created for this repository. Their models are built as editable Three.js geometry.
+The gallery, common viewer, and procedural keyboard, perfume bottle, turntable, watch, miniature city, coffee, film camera, terrarium, rocket, arcade cabinet, origami, and jellyfish scenes were created for this repository. Their models are built as editable Three.js geometry. The film strip landscapes and arcade screen graphics are original geometry. The rocket, ecosystem, paper folds, and marine movement are artistic studies.
 
 ## CAN/DO
 

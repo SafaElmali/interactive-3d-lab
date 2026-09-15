@@ -1,0 +1,26 @@
+.theme-arcade .chapter-heading {
+  font-size: clamp(76px, 17vw, 290px);
+  letter-spacing: -0.025em;
+  line-height: 0.83;
+}
+.theme-arcade .layout-left .chapter-heading,
+.theme-arcade .layout-right .chapter-heading {
+  font-size: clamp(65px, 11.5vw, 200px);
+}
+.theme-arcade .story-backdrop {
+  background:
+    radial-gradient(ellipse at 65% 50%, #c94cff20, transparent 60%),
+    repeating-linear-gradient(0deg, transparent 0 4px, #01051714 4px 5px);
+}
+.theme-arcade .chapter-label {
+  letter-spacing: 0.1em;
+}
+@media (max-width: 760px) {
+  .theme-arcade .chapter-heading,
+  .theme-arcade .layout-left .chapter-heading,
+  .theme-arcade .layout-right .chapter-heading {
+    font-size: 23vw;
+    top: 18%;
+    line-height: 0.94;
+  }
+}

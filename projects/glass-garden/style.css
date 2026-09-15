@@ -1,0 +1,28 @@
+.theme-garden .chapter-heading {
+  font-family: Playfair, Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(72px, 12.5vw, 240px);
+  line-height: 1;
+  letter-spacing: -0.07em;
+  text-transform: none;
+}
+.theme-garden .layout-left .chapter-heading,
+.theme-garden .layout-right .chapter-heading {
+  font-size: clamp(65px, 10vw, 190px);
+}
+.theme-garden .story-backdrop {
+  background: radial-gradient(ellipse at 65% 45%, #e6f4b829, transparent 60%);
+}
+.theme-garden .chapter-label {
+  letter-spacing: 0.12em;
+}
+@media (max-width: 760px) {
+  .theme-garden .chapter-heading,
+  .theme-garden .layout-left .chapter-heading,
+  .theme-garden .layout-right .chapter-heading {
+    font-size: 18vw;
+    top: 17%;
+    line-height: 1.02;
+  }
+}

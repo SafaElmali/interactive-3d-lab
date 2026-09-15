@@ -1,0 +1,47 @@
+.theme-lift .chapter-heading {
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  font-size: clamp(80px, 21vw, 360px);
+}
+.theme-lift .layout-left .chapter-heading,
+.theme-lift .layout-right .chapter-heading {
+  font-size: clamp(70px, 13vw, 230px);
+}
+.theme-lift .story-backdrop {
+  background-image: linear-gradient(90deg, transparent calc(50% - 0.5px), #f5e5c912 50%, transparent calc(50% + 0.5px));
+}
+.theme-lift .chapter-label {
+  letter-spacing: 0.12em;
+}
+.theme-lift .layout-finale .chapter-heading {
+  top: 15%;
+  font-size: 16vw;
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-lift::after {
+    transition: none !important;
+  }
+}
+@media (max-width: 760px) {
+  .theme-lift::after {
+    content: '';
+    position: fixed;
+    inset: auto 0 0;
+    height: 35svh;
+    z-index: 4;
+    pointer-events: none;
+    background: linear-gradient(transparent, #07152eed 48%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .theme-lift:has(.layout-finale:not([inert]))::after {
+    opacity: 1;
+  }
+  .theme-lift .chapter-heading,
+  .theme-lift .layout-left .chapter-heading,
+  .theme-lift .layout-right .chapter-heading,
+  .theme-lift .layout-finale .chapter-heading {
+    top: 17%;
+    font-size: 23vw;
+  }
+}

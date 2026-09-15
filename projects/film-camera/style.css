@@ -1,0 +1,42 @@
+.theme-exposure .chapter-heading {
+  font-weight: 600;
+  font-size: 16vw;
+  line-height: 0.81;
+  letter-spacing: -0.045em;
+}
+.theme-exposure .layout-hero .chapter-heading {
+  text-align: left;
+  top: 17%;
+  left: 5%;
+}
+.theme-exposure .layout-left .chapter-heading,
+.theme-exposure .layout-right .chapter-heading {
+  font-size: 12vw;
+}
+.theme-exposure .layout-finale .chapter-heading {
+  font-size: 12.4vw;
+  line-height: 0.85;
+  top: 15%;
+}
+.theme-exposure .story-backdrop {
+  background:
+    radial-gradient(ellipse at 82% 28%, #eaa05a33, transparent 58%),
+    repeating-linear-gradient(0deg, #fbe4ac03 0 1px, transparent 1px 5px);
+}
+@media (max-width: 760px) {
+  .theme-exposure .chapter-heading,
+  .theme-exposure .layout-hero .chapter-heading,
+  .theme-exposure .layout-left .chapter-heading,
+  .theme-exposure .layout-right .chapter-heading {
+    left: 5%;
+    top: 17%;
+    width: 90%;
+    text-align: center;
+    font-size: 24vw;
+    line-height: 0.9;
+  }
+  .theme-exposure .layout-finale .chapter-heading {
+    font-size: 21vw;
+    top: 17%;
+  }
+}

@@ -1,0 +1,28 @@
+.theme-deep-blue .chapter-heading {
+  font-family: Playfair, Georgia, serif;
+  font-size: clamp(80px, 15vw, 270px);
+  font-weight: 400;
+  line-height: 0.94;
+  text-transform: none;
+  letter-spacing: -0.075em;
+}
+.theme-deep-blue .layout-left .chapter-heading,
+.theme-deep-blue .layout-right .chapter-heading {
+  font-size: clamp(66px, 10.7vw, 190px);
+  line-height: 1;
+}
+.theme-deep-blue .story-backdrop {
+  background: radial-gradient(ellipse at 65% 43%, #2358ac26, transparent 56%), radial-gradient(ellipse at 30% 68%, #63499614, transparent 50%);
+}
+.theme-deep-blue .chapter-label {
+  letter-spacing: 0.13em;
+}
+@media (max-width: 760px) {
+  .theme-deep-blue .chapter-heading,
+  .theme-deep-blue .layout-left .chapter-heading,
+  .theme-deep-blue .layout-right .chapter-heading {
+    top: 17%;
+    font-size: 21vw;
+    line-height: 1.03;
+  }
+}

@@ -17,6 +17,10 @@ async function walk(dir) {
   return out;
 }
 const files = await walk(root);
+assert.equal(new Set(projects.map((p) => p.id)).size, projects.length);
+projects.forEach((project, index) =>
+  assert.equal(project.number, String(index + 1).padStart(2, '0')),
+);
 let checked = 0;
 for (const file of files) {
   if (/\.(m?js)$/.test(file) && !file.includes('/vendor/')) {
@@ -59,7 +63,7 @@ for (const slug of ['sneaker-studio', 'car-garage']) {
   assert.equal(b.readUInt32LE(8), b.length);
 }
 console.log(
-  `${checked} authored scripts parsed. Nine route folders and local references verified.`,
+  `${checked} authored scripts parsed. ${projects.length} route folders and local references verified.`,
 );
 for (const script of ['check-render-loop.mjs', 'check-scenes.mjs']) {
   const test = spawnSync(
