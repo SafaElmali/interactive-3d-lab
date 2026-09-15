@@ -6,6 +6,3 @@ node_modules/
 
 # Local Netlify folder
 .netlify
-
-# Local Remotion work
-/films/new-worlds/
